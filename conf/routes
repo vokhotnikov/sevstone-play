@@ -1,0 +1,21 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+#
+# Home page
+GET     /                           controllers.Application.index
+
+GET     /glossary                   controllers.Glossary.index
+
+
+GET     /edit/pick-out-places       controllers.edit.PickOutPlaces.index
+
+GET     /edit/pick-out-places       controllers.edit.PickOutPlaces.create
+POST    /edit/pick-out-places       controllers.edit.PickOutPlaces.save
+
+GET     /edit/pick-out-places/:id   controllers.edit.PickOutPlaces.edit(id: Long)
+POST    /edit/pick-out-places/:id   controllers.edit.PickOutPlaces.update(id: Long)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
