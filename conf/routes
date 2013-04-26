@@ -10,7 +10,7 @@ GET     /glossary                   controllers.Glossary.index
 
 GET     /edit/pick-out-places       controllers.edit.PickOutPlaces.index
 
-GET     /edit/pick-out-places       controllers.edit.PickOutPlaces.create
+GET     /edit/pick-out-places/new   controllers.edit.PickOutPlaces.create
 POST    /edit/pick-out-places       controllers.edit.PickOutPlaces.save
 
 GET     /edit/pick-out-places/:id   controllers.edit.PickOutPlaces.edit(id: Long)
