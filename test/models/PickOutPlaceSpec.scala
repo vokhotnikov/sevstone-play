@@ -4,30 +4,12 @@ import play.api.test._
 import play.api.test.Helpers._
 
 import play.api.db.slick.Config.driver.simple._
-import play.api.Play.current
 
 import models._
 
+import SlickSpecSupport._
+
 class PickOutPlaceSpec extends Specification {
-
-  def memDB[T](code: Session=>T) =
-      running( FakeApplication( additionalConfiguration = inMemoryDatabase() ++ Map(
-        "db.default.driver" -> "org.h2.Driver",
-        "db.default.url"    -> "jdbc:h2:mem:test;MODE=PostgreSQL",
-        "evolutionplugin"   -> "disabled"
-      ) ) ) {
-        val ddl = PickOutPlaces.ddl
-
-        play.api.db.slick.DB.withSession { implicit session: Session =>
-          try {
-            ddl.create
-            code(session)
-          } finally {
-            ddl.drop
-          }
-        }
-      }
-
   "PickOutPlaces DAL object" should {
     "return empty list" in memDB { implicit s: Session =>
       PickOutPlaces.findAll must be empty
@@ -47,6 +29,15 @@ class PickOutPlaceSpec extends Specification {
 
       val loaded = PickOutPlaces.findAll.map(_.id)
       loaded must contain(id1, id2)
+    }
+
+    "list available places in aplhabetical order" in memDB { implicit s: Session =>
+      val id1 = PickOutPlaces add NewPickOutPlace("BBB", "descr1")
+      val id2 = PickOutPlaces add NewPickOutPlace("aaa", "descr2")
+      val id3 = PickOutPlaces add NewPickOutPlace("zzz", "descr2")
+
+      val loaded = PickOutPlaces.findAll.map(_.id)
+      loaded must contain(id2, id1, id3).inOrder
     }
   }
 }

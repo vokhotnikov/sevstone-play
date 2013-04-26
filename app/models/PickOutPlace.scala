@@ -15,7 +15,9 @@ object PickOutPlaces extends Table[PickOutPlace]("pick_out_places") {
   def forInsert = title ~ description <> (NewPickOutPlace, NewPickOutPlace.unapply _) returning id
 
 
-  def findAll(implicit session: Session) = Query(PickOutPlaces).list
+  def findAll(implicit session: Session) = {
+    Query(PickOutPlaces).sortBy(_.title.toLowerCase).list
+  }
 
   def add(newPlace: NewPickOutPlace)(implicit session: Session) = forInsert insert newPlace
 }
