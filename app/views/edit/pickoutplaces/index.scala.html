@@ -1,0 +1,11 @@
+@(places: List[models.PickOutPlace])
+
+@if(places.isEmpty) {
+  <p>Пока не добавлено ни одного места отбора.</p>
+} else { 
+  <ul>
+  @for(p <- places) {
+    <li>@p.title</li>
+  }
+  </ul>
+}
