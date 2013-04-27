@@ -1,0 +1,5 @@
+@(place:models.PickOutPlace, placeForm:Form[models.NewPickOutPlace])
+
+@mainedit(place.title) {
+  @placeform(placeForm, "Сохранить изменения", controllers.edit.routes.PickOutPlacesController.update(place.id))
+}

@@ -1,0 +1,5 @@
+@(placeForm:Form[models.NewPickOutPlace])
+
+@mainedit("Новое место отбора") {
+  @placeform(placeForm, "Создать", controllers.edit.routes.PickOutPlacesController.save)
+}

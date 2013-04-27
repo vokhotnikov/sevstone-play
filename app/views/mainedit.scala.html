@@ -21,6 +21,7 @@
             }
         </style>
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-responsive.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 
         <script src="@routes.Assets.at("javascripts/modernizr-2.6.2-respond-1.1.0.min.js")"></script>
     </head>
@@ -70,7 +71,7 @@
 
         <div class="container">
             <div class="row">
-              <h1>@pageHeader</h1>
+              <h2>@pageHeader</h2>
               @content
             </div>
 
@@ -88,7 +89,19 @@
 
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
 
-        <script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/tinymce/tinymce.min.js")"></script>
+        <script type="text/javascript">
+          tinymce.init({
+            selector: "textarea.richedit",
+            theme: "modern",
+            menubar: false,
+            width: 700,
+            plugins: [ "link image" ],
+            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link image"
+                   });
+         </script>
+
+         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';

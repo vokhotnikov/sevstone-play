@@ -39,5 +39,43 @@ class PickOutPlaceSpec extends Specification {
       val loaded = PickOutPlaces.findAll.map(_.id)
       loaded must contain(id2, id1, id3).inOrder
     }
+
+    "allow to add long description" in memDB { implicit session: Session =>
+      val descr = List.fill(1024)("1234567890").mkString("")
+
+      val id = PickOutPlaces add NewPickOutPlace("test", descr)
+
+      val loaded = PickOutPlaces.findAll.filter(_.id == id).map(_.description).headOption
+      loaded must_== Some(descr)
+    }
+
+    "search existing object by id" in memDB { implicit session: Session =>
+      val id1 = PickOutPlaces add NewPickOutPlace("place1", "descr1")
+      val id2 = PickOutPlaces add NewPickOutPlace("place2", "descr2")
+
+      PickOutPlaces.findById(id1).map(_.title) must_== Some("place1")
+      PickOutPlaces.findById(id2).map(_.title) must_== Some("place2")
+      PickOutPlaces.findById(id2 + 1000000) must_== None
+    }
+
+    "allow to update existing place" in memDB { implicit session: Session =>
+      val id1 = PickOutPlaces add NewPickOutPlace("place1", "descr1")
+      val id2 = PickOutPlaces add NewPickOutPlace("place2", "descr2")
+
+      val count = PickOutPlaces.update(id2, NewPickOutPlace("new-place-12", "NDesc"))
+
+      val loaded = PickOutPlaces.findById(id2).map(p => (p.title, p.description))
+      loaded must_== Some(("new-place-12", "NDesc"))
+      count must_== 1
+
+      val unchanged = PickOutPlaces.findById(id1).map(p => (p.title, p.description))
+      unchanged must_== Some(("place1", "descr1"))
+    }
+
+    "return zero count when updating non-existing place" in memDB { implicit session: Session =>
+      val count = PickOutPlaces.update(10000000, NewPickOutPlace("new-place-12", "NDesc"))
+      count must_== 0
+      PickOutPlaces.findAll.length must_== 0
+    }
   }
 }

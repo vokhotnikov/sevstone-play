@@ -12,17 +12,11 @@ class PickOutPlacesListViewSpec extends Specification {
       val html = views.html.edit.pickoutplaces.index(places)
       contentAsString(html) must contain("First test place")
       contentAsString(html) must contain("Second test place")
-
-      contentAsString(html) must not contain("{")
-      contentAsString(html) must not contain("}")
     }
 
     "render message about absent data when no places is passed" in {
       val html = views.html.edit.pickoutplaces.index(List())
       contentAsString(html) must contain("Пока не добавлено ни одного места отбора.")
-
-      contentAsString(html) must not contain("{")
-      contentAsString(html) must not contain("}")
     }
   }
 }

@@ -4,11 +4,11 @@
   @if(places.isEmpty) {
     <p>Пока не добавлено ни одного места отбора.</p>
   } else { 
-    <ul>
+    <ul class="unstyled">
     @for(p <- places) {
-      <li>@p.title</li>
+      <li class="editable-item"><a href="@controllers.edit.routes.PickOutPlacesController.edit(p.id)">@p.title</a></li>
     }
     </ul>
   }
-  <a class="btn" href="@controllers.edit.routes.PickOutPlaces.create()">Добавить место отбора</a>
+  <a class="btn btn-primary" href="@controllers.edit.routes.PickOutPlacesController.create()">Добавить место отбора</a>
 }
