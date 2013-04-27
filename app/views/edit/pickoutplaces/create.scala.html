@@ -1,4 +1,4 @@
-@(placeForm:Form[models.NewPickOutPlace])
+@(placeForm:Form[models.NewPickOutPlace])(implicit flash: Flash)
 
 @mainedit("Новое место отбора") {
   @placeform(placeForm, "Создать", controllers.edit.routes.PickOutPlacesController.save)

@@ -1,4 +1,4 @@
-@(places: List[models.PickOutPlace])
+@(places: List[models.PickOutPlace])(implicit flash: Flash)
 
 @mainedit("Места отбора") {
   @if(places.isEmpty) {

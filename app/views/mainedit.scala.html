@@ -1,4 +1,4 @@
-@(pageHeader: String)(content: Html)
+@(pageHeader: String)(content: Html)(implicit flash: Flash)
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -72,6 +72,14 @@
         <div class="container">
             <div class="row">
               <h2>@pageHeader</h2>
+
+              @flash.get("error").map { err =>
+                <div class="alert alert-error">
+                  <button class="close" type="button" data-dismiss="alert">&times;</button>
+                  Error: some error
+                </div>
+              }.getOrElse { }
+        
               @content
             </div>
 
