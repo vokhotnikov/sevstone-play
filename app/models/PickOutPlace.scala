@@ -3,11 +3,11 @@ package models
 import play.api.db.slick.Config.driver.simple._
 
 case class NewPickOutPlace(title: String, description: String)
-case class PickOutPlace(id: Long, title: String, description: String) {
+case class PickOutPlace(id: Long, title: String, description: String) extends ModelEntity[NewPickOutPlace] {
   def asNew = NewPickOutPlace(title, description)
 }
 
-object PickOutPlaces extends Table[PickOutPlace]("pick_out_places") {
+object PickOutPlaces extends Table[PickOutPlace]("pick_out_places")  with CrudSupport[PickOutPlace, NewPickOutPlace]{
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def title = column[String]("title", O.NotNull)
   def description = column[String]("description", O.NotNull, O.DBType("text"))
