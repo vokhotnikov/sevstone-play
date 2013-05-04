@@ -1,20 +1,16 @@
 package controllers.edit
 
-import play.api._
-import play.api.mvc.{Controller,Action,Request,Result}
+import play.api.mvc.{Controller,Request}
 import play.api.Play.current
 
 import play.api.data._
 import play.api.data.Forms._
 
-import play.api.db.slick.DB
-import play.api.db.slick.Config.driver.simple._
-
 import models._
 
 import views.html.edit.pickoutplaces
 
-object PickOutPlacesController extends Controller {
+object PickOutPlacesController extends Controller with CrudActions[PickOutPlace, NewPickOutPlace] {
   val pickOutPlaceForm = Form(
     mapping(
       "title" -> nonEmptyText,
@@ -22,57 +18,15 @@ object PickOutPlacesController extends Controller {
     )(NewPickOutPlace.apply)(NewPickOutPlace.unapply)
   )
 
-  private def withExisting[A](id: Long)(f: PickOutPlace => Result)(implicit request: Request[A]) = {
-    DB.withTransaction { implicit session =>
-      val place = PickOutPlaces findById id
-      place match {
-        case None => BadRequest(pickoutplaces.index(PickOutPlaces.findAll)).flashing("error" -> ("Место отбора не найдено: " + id.toString))
-        case Some(p) => f(p)
-      }
-    }
-  }
+  def dalObject = PickOutPlaces
 
-  def index = Action { implicit request =>
-    DB.withTransaction { implicit session =>
-      Ok(pickoutplaces.index(PickOutPlaces.findAll))
-    }
-  }
+  def crudEditForm = pickOutPlaceForm
 
-  def create = Action { implicit request =>
-    Ok(pickoutplaces.create(pickOutPlaceForm))
-  }
+  def indexRoute = routes.PickOutPlacesController.index
 
-  def save = Action { implicit request =>
-    pickOutPlaceForm.bindFromRequest.fold(
-      errors => {
-        BadRequest(pickoutplaces.create(errors))
-      },
-      newPlace => {
-        DB.withTransaction { implicit session =>
-          PickOutPlaces add newPlace
-        }
-        Redirect(routes.PickOutPlacesController.index)
-      })
-  }
+  def indexView[B](implicit request: Request[B], all:List[PickOutPlace]) = pickoutplaces.index(all)
+  def createView[B](implicit request: Request[B], form: Form[NewPickOutPlace]) = pickoutplaces.create(form)
+  def editView[B](implicit request: Request[B], a: PickOutPlace, form: Form[NewPickOutPlace]) = pickoutplaces.edit(a, form)
 
-  def edit(id: Long) = Action { implicit request =>
-    withExisting(id) { p =>
-      Ok(pickoutplaces.edit(p, pickOutPlaceForm.fill(p.asNew)))
-    }
-  }
-
-  def update(id:Long) = Action { implicit request =>
-    pickOutPlaceForm.bindFromRequest.fold(
-      errors => {
-        withExisting(id) { p =>
-          BadRequest(pickoutplaces.edit(p, errors))
-        }
-      },
-      newPlaceValue => {
-        DB.withTransaction { implicit session =>
-          PickOutPlaces.update(id, newPlaceValue)
-        }
-        Redirect(routes.PickOutPlacesController.index)
-      })
-  }
+  def notFoundErrorText(details: String) = "Место отбора не найдено: " + details
 }

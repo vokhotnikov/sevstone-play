@@ -7,7 +7,7 @@ case class DepositsPlace(id: Long, title: String, description: String) extends M
   def asNew = NewDepositsPlace(title, description)
 }
 
-object DepositsPlaces extends Table[DepositsPlace]("pick_out_places") with CrudSupport[DepositsPlace, NewDepositsPlace] {
+object DepositsPlaces extends Table[DepositsPlace]("deposits_places") with CrudSupport[DepositsPlace, NewDepositsPlace] {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def title = column[String]("title", O.NotNull)
   def description = column[String]("description", O.NotNull, O.DBType("text"))
