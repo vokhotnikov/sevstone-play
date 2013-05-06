@@ -21,6 +21,7 @@
             }
         </style>
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-responsive.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/chosen.css")">
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 
         <script src="@routes.Assets.at("javascripts/modernizr-2.6.2-respond-1.1.0.min.js")"></script>
@@ -78,16 +79,21 @@
 
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
 
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/chosen.jquery.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/tinymce/tinymce.min.js")"></script>
         <script type="text/javascript">
-          tinymce.init({
-            selector: "textarea.richedit",
-            theme: "modern",
-            menubar: false,
-            width: 700,
-            plugins: [ "link image" ],
-            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link image"
-                   });
+          $(function() {
+            $(".chzn-select").chosen();
+
+            tinymce.init({
+              selector: "textarea.richedit",
+              theme: "modern",
+              menubar: false,
+              width: 700,
+              plugins: [ "link image" ],
+              toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | subscript superscript | link image"
+                     });
+          });
          </script>
 
          <script>

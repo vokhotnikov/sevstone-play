@@ -6,7 +6,9 @@
 <div class="row">
   @form(action, args:_*) {
     @inputText(expoForm("title"), '_label -> "Название")
-    @select(expoForm("parentId"), Seq(("", "- без родителя -")) ++ possibleParents.map(p => (p.id.toString, p.title)), '_label -> "Родитель")
+    <div class="chosen">
+      @select(expoForm("parentId"), Seq(("", "- без родителя -")) ++ possibleParents.map(p => (p.id.toString, p.title)), '_label -> "Родитель", 'class -> "chzn-select")
+    </div>
     @inputText(expoForm("sortPriority"), '_label -> "Приоритет")
     @textarea(expoForm("description"), '_label -> "Описание", 'rows -> 20, 'class -> "richedit")
     <input type="submit" class="btn btn-primary" value="@saveCaption">
