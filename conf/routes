@@ -24,6 +24,13 @@ POST    /edit/deposits-places       controllers.edit.DepositsPlacesController.sa
 GET     /edit/deposits-places/:id   controllers.edit.DepositsPlacesController.edit(id: Long)
 POST    /edit/deposits-places/:id   controllers.edit.DepositsPlacesController.update(id: Long)
 
+GET     /edit/expositions       controllers.edit.ExpositionsController.index
+
+GET     /edit/expositions/new   controllers.edit.ExpositionsController.create
+POST    /edit/expositions       controllers.edit.ExpositionsController.save
+
+GET     /edit/expositions/:id   controllers.edit.ExpositionsController.edit(id: Long)
+POST    /edit/expositions/:id   controllers.edit.ExpositionsController.update(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

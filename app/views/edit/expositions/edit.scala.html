@@ -1,0 +1,5 @@
+@(expo:models.Exposition, expoForm:Form[models.NewExposition], possibleParents: List[models.Exposition])(implicit flash: Flash)
+
+@mainedit(expo.title) {
+  @expoform(expoForm, possibleParents, "Сохранить изменения", controllers.edit.routes.ExpositionsController.update(expo.id))
+}

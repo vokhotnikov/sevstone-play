@@ -15,7 +15,7 @@ import play.api.db.slick.Config.driver.simple._
 import models.ModelEntity
 import models.CrudSupport
 
-trait CrudActions[A <: ModelEntity[NA] ,NA] { self: Controller =>
+trait CrudActions[A <: ModelEntity[NA], NA, FormSupportData] { self: Controller =>
   def dalObject: CrudSupport[A, NA]
 
   def crudEditForm: Form[NA]
@@ -23,10 +23,12 @@ trait CrudActions[A <: ModelEntity[NA] ,NA] { self: Controller =>
   def indexRoute: Call
 
   def indexView[B](implicit request: Request[B], all: List[A]): Html
-  def createView[B](implicit request: Request[B], form: Form[NA]): Html
-  def editView[B](implicit request: Request[B], a: A, form: Form[NA]): Html
+  def createView[B](implicit request: Request[B], form: Form[NA], formSupport: FormSupportData): Html
+  def editView[B](implicit request: Request[B], a: A, form: Form[NA], formSupport: FormSupportData): Html
 
   def notFoundErrorText(details: String): String
+
+  def constructFormSupportData(current: Option[A])(implicit session: Session):FormSupportData
 
   private def withExisting[B](id: Long)(f: A => Result)(implicit request: Request[B]) = {
     DB.withTransaction { implicit session =>
@@ -45,13 +47,17 @@ trait CrudActions[A <: ModelEntity[NA] ,NA] { self: Controller =>
   }
 
   def create = Action { implicit request =>
-    Ok(createView(request, crudEditForm))
+    DB.withTransaction { implicit session =>
+      Ok(createView(request, crudEditForm, constructFormSupportData(None)))
+    }
   }
 
   def save = Action { implicit request =>
     crudEditForm.bindFromRequest.fold(
       errors => {
-        BadRequest(createView(request, errors))
+        DB.withTransaction { implicit session =>
+          BadRequest(createView(request, errors, constructFormSupportData(None)))
+        }
       },
       newValue => {
         DB.withTransaction { implicit session =>
@@ -63,7 +69,9 @@ trait CrudActions[A <: ModelEntity[NA] ,NA] { self: Controller =>
 
   def edit(id: Long) = Action { implicit request =>
     withExisting(id) { p =>
-      Ok(editView(request, p, crudEditForm.fill(p.asNew)))
+      DB.withTransaction { implicit session =>
+        Ok(editView(request, p, crudEditForm.fill(p.asNew), constructFormSupportData(Some(p))))
+      }
     }
   }
 
@@ -71,7 +79,9 @@ trait CrudActions[A <: ModelEntity[NA] ,NA] { self: Controller =>
     crudEditForm.bindFromRequest.fold(
       errors => {
         withExisting(id) { p =>
-          BadRequest(editView(request, p, errors))
+          DB.withTransaction { implicit session =>
+            BadRequest(editView(request, p, errors, constructFormSupportData(Some(p))))
+          }
         }
       },
       newPlaceValue => {
@@ -81,5 +91,9 @@ trait CrudActions[A <: ModelEntity[NA] ,NA] { self: Controller =>
         Redirect(indexRoute)
       })
   }
+}
+
+trait SimpleCrudActions[A <: ModelEntity[NA], NA] extends CrudActions[A, NA, Any] { self: Controller =>
+  def constructFormSupportData(current: Option[A])(implicit session: Session):Any = None
 }
 

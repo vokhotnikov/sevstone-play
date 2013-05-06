@@ -10,7 +10,7 @@ import models._
 
 import views.html.edit.pickoutplaces
 
-object PickOutPlacesController extends Controller with CrudActions[PickOutPlace, NewPickOutPlace] {
+object PickOutPlacesController extends Controller with SimpleCrudActions[PickOutPlace, NewPickOutPlace] {
   val pickOutPlaceForm = Form(
     mapping(
       "title" -> nonEmptyText,
@@ -25,8 +25,8 @@ object PickOutPlacesController extends Controller with CrudActions[PickOutPlace,
   def indexRoute = routes.PickOutPlacesController.index
 
   def indexView[B](implicit request: Request[B], all:List[PickOutPlace]) = pickoutplaces.index(all)
-  def createView[B](implicit request: Request[B], form: Form[NewPickOutPlace]) = pickoutplaces.create(form)
-  def editView[B](implicit request: Request[B], a: PickOutPlace, form: Form[NewPickOutPlace]) = pickoutplaces.edit(a, form)
+  def createView[B](implicit request: Request[B], form: Form[NewPickOutPlace], formSupport: Any) = pickoutplaces.create(form)
+  def editView[B](implicit request: Request[B], a: PickOutPlace, form: Form[NewPickOutPlace], formSupport: Any) = pickoutplaces.edit(a, form)
 
   def notFoundErrorText(details: String) = "Место отбора не найдено: " + details
 }

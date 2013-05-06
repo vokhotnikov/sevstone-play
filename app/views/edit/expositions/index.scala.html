@@ -1,0 +1,14 @@
+@(expos: List[models.Exposition])(implicit flash: Flash)
+
+@mainedit("Экспозиции") {
+  @if(expos.isEmpty) {
+    <p>Пока не добавлено ни одной экспозиции.</p>
+  } else { 
+    <ul class="unstyled">
+    @for(p <- expos) {
+      <li class="editable-item"><a href="@controllers.edit.routes.ExpositionsController.edit(p.id)">@p.title</a></li>
+    }
+    </ul>
+  }
+  <a class="btn btn-primary" href="@controllers.edit.routes.ExpositionsController.create()">Добавить экспозицию</a>
+}

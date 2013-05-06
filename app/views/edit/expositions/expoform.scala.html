@@ -1,0 +1,15 @@
+@(expoForm:Form[models.NewExposition], possibleParents: List[models.Exposition], saveCaption: String, action: Call, args: (Symbol, String)*)
+
+@import helper._
+@import helper.twitterBootstrap._
+
+<div class="row">
+  @form(action, args:_*) {
+    @inputText(expoForm("title"), '_label -> "Название")
+    @select(expoForm("parentId"), Seq(("", "- без родителя -")) ++ possibleParents.map(p => (p.id.toString, p.title)), '_label -> "Родитель")
+    @inputText(expoForm("sortPriority"), '_label -> "Приоритет")
+    @textarea(expoForm("description"), '_label -> "Описание", 'rows -> 20, 'class -> "richedit")
+    <input type="submit" class="btn btn-primary" value="@saveCaption">
+    <a class="btn" href="@controllers.edit.routes.ExpositionsController.index()">Отмена</a>
+  }
+</div>
