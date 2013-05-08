@@ -3,7 +3,7 @@ package models
 import play.api.db.slick.Config.driver.simple._
 
 case class NewExposition(parentId: Option[Long], title: String, description: String, sortPriority: Long)
-case class Exposition(id: Long, parentId: Option[Long], title: String, description: String, sortPriority: Long) extends ModelEntity[NewExposition] {
+case class Exposition(id: Long, parentId: Option[Long], title: String, description: String, sortPriority: Long) extends HierarchicalEntity[NewExposition] {
   def asNew = NewExposition(parentId, title, description, sortPriority)
 }
 
