@@ -1,0 +1,22 @@
+@(expos: List[models.Hierarchy[models.Exposition]])(implicit flash: Flash)
+
+@renderSubtrees(trees: List[models.Hierarchy[models.Exposition]]) = {
+  <ul class="tree-branch">
+  @for(p <- trees) {
+    <li class="editable-item"><a href="@controllers.edit.routes.ExpositionsController.edit(p.node.id)">@p.node.title</a>
+    @if(! p.children.isEmpty) {
+      @renderSubtrees(p.children)
+    }
+    </li>
+  }
+  </ul>
+}
+
+@mainedit("Экспозиции") {
+  @if(expos.isEmpty) {
+    <p>Пока не добавлено ни одной экспозиции.</p>
+  } else { 
+    @renderSubtrees(expos)
+  }
+  <a class="btn btn-primary" href="@controllers.edit.routes.ExpositionsController.create()">Добавить экспозицию</a>
+}

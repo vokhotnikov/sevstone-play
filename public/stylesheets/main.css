@@ -11,3 +11,7 @@ input, textarea, .uneditable-input {
 .editable-item {
   line-height: 25px;
 }
+
+ul.tree-branch li {
+  list-style-type: circle;
+}

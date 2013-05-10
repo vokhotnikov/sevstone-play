@@ -33,4 +33,6 @@ object Expositions extends Table[Exposition]("expositions") with CrudSupport[Exp
     val q = for { p <- Expositions if p.id === id } yield p.parentId ~ p.title ~ p.description ~ p.sortPriority
     q update ((newValue.parentId, newValue.title, newValue.description, newValue.sortPriority))
   }
+
+  def loadHierarchies(implicit session: Session) = Hierarchy(findAll)
 }

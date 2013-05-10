@@ -1,6 +1,6 @@
 package controllers.edit
 
-import play.api.mvc.{Controller,Request}
+import play.api.mvc.{Controller,Request,Action}
 import play.api.Play.current
 
 import play.api.data._
@@ -36,10 +36,17 @@ object ExpositionsController extends Controller with CrudActions[Exposition, New
     }
   }
 
-  def indexRoute = routes.ExpositionsController.index
+  def indexRoute = routes.ExpositionsController.indexTree
 
   def indexView[B](implicit request: Request[B], all:List[Exposition]) = expositions.index(all)
   def createView[B](implicit request: Request[B], form: Form[NewExposition], formSupport: List[Exposition]) = expositions.create(form, formSupport)
   def editView[B](implicit request: Request[B], a: Exposition, form: Form[NewExposition], formSupport: List[Exposition]) = expositions.edit(a, form, formSupport)
   def notFoundErrorText(details: String) = "Экспозиция не найдена: " + details
+
+  def indexTree = Action { implicit request =>
+    DB.withTransaction { implicit session =>
+      val expos = Expositions.loadHierarchies
+      Ok(expositions.indexTree(expos))
+    }
+  }
 }

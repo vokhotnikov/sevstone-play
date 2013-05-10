@@ -33,5 +33,19 @@ class ExpositionSpec extends Specification with CrudSpecification[Exposition, Ne
       loaded must_== Some(descr)
     }
 
+
+    "support loading of hierarchies" in memDB { implicit session: Session =>
+      val id1 = Expositions add NewExposition(None, "BBB", "descr1", 3)
+      val id2 = Expositions add NewExposition(None, "aaa", "descr2", 1)
+      val id3 = Expositions add NewExposition(Some(id1), "zzz", "descr2", 1)
+
+      val loaded = Expositions.loadHierarchies
+      val l1 = Expositions findById id1
+      val l2 = Expositions findById id2
+      val l3 = Expositions findById id3
+
+      loaded must contain(Hierarchy(l2.get, None, List()),
+        Hierarchy(l1.get, None, List(Hierarchy(l3.get, l1, List())))).only.inOrder
+    }
   }
 }

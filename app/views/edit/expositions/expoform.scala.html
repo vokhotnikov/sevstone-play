@@ -12,6 +12,6 @@
     @inputText(expoForm("sortPriority"), '_label -> "Приоритет")
     @textarea(expoForm("description"), '_label -> "Описание", 'rows -> 20, 'class -> "richedit")
     <input type="submit" class="btn btn-primary" value="@saveCaption">
-    <a class="btn" href="@controllers.edit.routes.ExpositionsController.index()">Отмена</a>
+    <a class="btn" href="@controllers.edit.routes.ExpositionsController.indexTree()">Отмена</a>
   }
 </div>
