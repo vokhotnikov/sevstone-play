@@ -1,6 +1,7 @@
 package models
 
 import scala.annotation.tailrec
+import scala.language.postfixOps
 
 trait HierarchicalEntity[NA] extends ModelEntity[NA] {
   def parentId: Option[Long]
