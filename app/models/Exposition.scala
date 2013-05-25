@@ -14,7 +14,7 @@ object Expositions extends Table[Exposition]("expositions") with CrudSupport[Exp
   def description = column[String]("description", O.NotNull, O.DBType("text"))
   def sortPriority = column[Long]("sort_priority", O.NotNull, O.Default(0))
 
-  def parent = foreignKey("ParentFK", parentId, Expositions)(_.id)
+  def parent = foreignKey("Expositions_ParentFK", parentId, Expositions)(_.id)
 
   def * = id ~ parentId ~ title ~ description ~ sortPriority <> (Exposition, Exposition.unapply _)
 

@@ -13,7 +13,7 @@ object SlickSpecSupport {
         "db.default.url"    -> "jdbc:h2:mem:test;MODE=PostgreSQL",
         "evolutionplugin"   -> "disabled"
       ) ) ) {
-        val ddl = PickOutPlaces.ddl ++ DepositsPlaces.ddl ++ Expositions.ddl
+        val ddl = PickOutPlaces.ddl ++ DepositsPlaces.ddl ++ Expositions.ddl ++ Categories.ddl
 
         play.api.db.slick.DB.withSession { implicit session: Session =>
           try {
@@ -24,4 +24,5 @@ object SlickSpecSupport {
           }
         }
       }
+
 }
