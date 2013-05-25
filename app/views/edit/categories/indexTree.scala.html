@@ -1,0 +1,22 @@
+@(cats: List[models.Hierarchy[models.Category]])(implicit flash: Flash)
+
+@renderSubtrees(trees: List[models.Hierarchy[models.Category]]) = {
+  <ul class="tree-branch">
+  @for(p <- trees) {
+    <li class="editable-item"><a href="@controllers.edit.routes.CategoriesController.edit(p.node.id)">@p.node.title</a>
+    @if(! p.children.isEmpty) {
+      @renderSubtrees(p.children)
+    }
+    </li>
+  }
+  </ul>
+}
+
+@mainedit("Категории") {
+  @if(cats.isEmpty) {
+    <p>Пока не добавлено ни одной категории.</p>
+  } else { 
+    @renderSubtrees(cats)
+  }
+  <a class="btn btn-primary" href="@controllers.edit.routes.CategoriesController.create()">Добавить экспозицию</a>
+}

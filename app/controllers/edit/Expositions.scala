@@ -28,7 +28,6 @@ object ExpositionsController extends Controller with CrudActions[Exposition, New
   def crudEditForm = expositionForm
 
   def constructFormSupportData(current: Option[Exposition])(implicit session:Session) = {
-    // TODO: this must exclude the whole subtree not just current element
     val all = Expositions.findAll
     current match {
       case Some(c) => {

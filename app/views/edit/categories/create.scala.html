@@ -1,0 +1,5 @@
+@(expoForm:Form[models.NewCategory], possibleParents: List[models.Category])(implicit flash: Flash)
+
+@mainedit("Новая категория") {
+  @expoform(expoForm, possibleParents, "Создать", controllers.edit.routes.CategoriesController.save)
+}
