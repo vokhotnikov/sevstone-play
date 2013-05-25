@@ -8,15 +8,19 @@ trait HierarchicalEntity[NA] extends ModelEntity[NA] {
   def sortPriority: Long
 }
 
-case class Hierarchy[A <: HierarchicalEntity[_]](node: A, parent: Option[A], children: List[Hierarchy[A]])
+case class Hierarchy[A <: HierarchicalEntity[_]](node: A, parent: Option[A], children: List[Hierarchy[A]]) {
+  def findSubtree(predicate:(A => Boolean)):Option[Hierarchy[A]] = {
+    if (predicate(node)) Some(this) else children.flatMap{_.findSubtree(predicate)}.headOption
+  }
+
+  def toList:List[A] = {
+    node :: children.flatMap { _.toList }
+  }
+}
 
 object Hierarchy {
   def apply[A <: HierarchicalEntity[_]](records: List[A]):List[Hierarchy[A]] = {
     val flattened = records map { Hierarchy[A](_, None, List()) }
-
-    def allNodesIn(subtree: Hierarchy[A]): List[A] = {
-      subtree.node :: subtree.children.flatMap { allNodesIn(_) }
-    }
 
     def sortLevel(subtrees: List[Hierarchy[A]]) = subtrees sortBy { _.node.sortPriority }
 
@@ -34,12 +38,12 @@ object Hierarchy {
       subtrees match {
         case Nil => Nil
         case x :: xs => {
-          val headIds = allNodesIn(x) map { n => Some(n.id) }
+          val headIds = x.toList map { n => Some(n.id) }
           val toMerge = xs filter { headIds contains _.node.parentId }
           if (toMerge.length > 0) mergePass(mergeInto(x, toMerge.groupBy{_.node.parentId}) :: xs.diff(toMerge))
           else {
             val toJoin = xs.filter{ t =>
-              val nodeIds = allNodesIn(t) map { n => Some(n.id) }
+              val nodeIds = t.toList map { n => Some(n.id) }
               nodeIds contains x.node.parentId
             }.headOption
 

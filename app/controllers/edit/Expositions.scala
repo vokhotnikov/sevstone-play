@@ -31,7 +31,15 @@ object ExpositionsController extends Controller with CrudActions[Exposition, New
     // TODO: this must exclude the whole subtree not just current element
     val all = Expositions.findAll
     current match {
-      case Some(c) => all.filter(_.id != c.id)
+      case Some(c) => {
+        all.diff(Hierarchy(all).flatMap{ t =>
+          val subtree = t.findSubtree{_.id == c.id}
+          subtree match {
+            case None => Nil
+            case Some(st) => st.toList
+          }
+        })
+      }
       case None => all
     }
   }
