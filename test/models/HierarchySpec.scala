@@ -40,7 +40,6 @@ class HierarchySpec extends Specification {
       val r1 = Record(12, None, 0, "aa")
       val r2 = Record(100, Some(12), 0, "bb")
 
-      println("!-!")
       val subtrees = Hierarchy(List(r1, r2))
       subtrees must contain(Hierarchy(r1, None, List(Hierarchy(r2, Some(r1), List())))).only
 
@@ -84,5 +83,18 @@ class HierarchySpec extends Specification {
       subtreesReverse must contain(Hierarchy(r2, None, List()), Hierarchy(r1, None, List())).inOrder
     }
 
+    "support multi-level hierarchy" in {
+      var r = Record(10, None, 300, "root")
+      val r1 = Record(12, Some(10), 200, "aa")
+      val r2 = Record(100, Some(12), 100, "bb")
+
+      val subtrees = Hierarchy(List(r1, r2, r))
+      subtrees must contain(Hierarchy(r, None, List(
+        Hierarchy(r1, Some(r), List(Hierarchy(r2, Some(r1), List())))))).inOrder
+
+      val subtreesReverse = Hierarchy(List(r, r2, r1))
+      subtreesReverse must contain(Hierarchy(r, None, List(
+        Hierarchy(r1, Some(r), List(Hierarchy(r2, Some(r1), List())))))).inOrder
+    }
   }
 }

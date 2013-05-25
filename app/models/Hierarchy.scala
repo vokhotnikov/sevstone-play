@@ -20,9 +20,9 @@ object Hierarchy {
 
     def sortLevel(subtrees: List[Hierarchy[A]]) = subtrees sortBy { _.node.sortPriority }
 
-    def mergeInto(subtree: Hierarchy[A], branches: Map[A, List[Hierarchy[A]]]): Hierarchy[A] = {
+    def mergeInto(subtree: Hierarchy[A], branches: Map[Option[Long], List[Hierarchy[A]]]): Hierarchy[A] = {
       val node = subtree.node
-      val myBranches = branches get node
+      val myBranches = branches get Some(node.id)
       myBranches match {
         case None => Hierarchy(node, subtree.parent, subtree.children.map{c => mergeInto(c, branches)})
         case Some(b) => Hierarchy(node, subtree.parent,
@@ -30,26 +30,26 @@ object Hierarchy {
       }
     }
 
-    @tailrec
     def mergePass(subtrees: List[Hierarchy[A]]): List[Hierarchy[A]] = {
-      val grouped = subtrees groupBy { _.node.parentId }
+      subtrees match {
+        case Nil => Nil
+        case x :: xs => {
+          val headIds = allNodesIn(x) map { n => Some(n.id) }
+          val toMerge = xs filter { headIds contains _.node.parentId }
+          if (toMerge.length > 0) mergePass(mergeInto(x, toMerge.groupBy{_.node.parentId}) :: xs.diff(toMerge))
+          else {
+            val toJoin = xs.filter{ t =>
+              val nodeIds = allNodesIn(t) map { n => Some(n.id) }
+              nodeIds contains x.node.parentId
+            }.headOption
 
-      val merged = subtrees map { t =>
-        val toMerge = allNodesIn(t) flatMap { n =>
-          val branch = grouped get Some(n.id)
-          branch match {
-            case Some(b) => Some(n, b)
-            case None => None
+            toJoin match {
+              case None => x :: mergePass(xs)
+              case Some(b) => mergePass(mergeInto(b, Map((x.node.parentId, List(x)))) :: xs.diff(List(b)))
+            }
           }
-        } groupBy { _._1 } mapValues { v => v flatMap {_._2} }
-
-        mergeInto(t, toMerge)
+        }
       }
-
-      val nonRootIds = merged flatMap { _.children } flatMap { allNodesIn(_) } map { _.id } toSet
-      val filtered = merged filterNot { nonRootIds contains _.node.id }
-
-      if (subtrees.length == filtered.length) filtered else mergePass(filtered)
     }
 
     mergePass(sortLevel(flattened))
