@@ -1,5 +1,5 @@
-@(expo:models.Category, expoForm:Form[models.NewCategory], possibleParents: List[models.Category])(implicit flash: Flash)
+@(cat:models.Category, catForm:Form[models.NewCategory], possibleParents: List[models.Category])(implicit flash: Flash)
 
-@mainedit(expo.title) {
-  @expoform(expoForm, possibleParents, "Сохранить изменения", controllers.edit.routes.CategoriesController.update(expo.id))
+@mainedit(cat.title) {
+  @catform(catForm, possibleParents, "Сохранить изменения", controllers.edit.routes.CategoriesController.update(cat.id))
 }

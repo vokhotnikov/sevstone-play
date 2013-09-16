@@ -31,7 +31,7 @@ trait CrudActions[A <: ModelEntity[NA], NA, FormSupportData] { self: Controller 
   def constructFormSupportData(current: Option[A])(implicit session: Session):FormSupportData
 
   private def withExisting[B](id: Long)(f: A => Result)(implicit request: Request[B]) = {
-    DB.withTransaction { implicit session =>
+    DB.withTransaction { implicit session: Session =>
       val place = dalObject findById id
       place match {
         case None => BadRequest(indexView(request, dalObject.findAll)).flashing("error" -> notFoundErrorText(id.toString))
@@ -55,12 +55,12 @@ trait CrudActions[A <: ModelEntity[NA], NA, FormSupportData] { self: Controller 
   def save = Action { implicit request =>
     crudEditForm.bindFromRequest.fold(
       errors => {
-        DB.withTransaction { implicit session =>
+        DB.withTransaction { implicit session: Session =>
           BadRequest(createView(request, errors, constructFormSupportData(None)))
         }
       },
       newValue => {
-        DB.withTransaction { implicit session =>
+        DB.withTransaction { implicit session: Session =>
           dalObject add newValue
         }
         Redirect(indexRoute)
@@ -85,7 +85,7 @@ trait CrudActions[A <: ModelEntity[NA], NA, FormSupportData] { self: Controller 
         }
       },
       newPlaceValue => {
-        DB.withTransaction { implicit session =>
+        DB.withTransaction { implicit session: Session =>
           dalObject.update(id, newPlaceValue)
         }
         Redirect(indexRoute)

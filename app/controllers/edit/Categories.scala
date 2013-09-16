@@ -18,7 +18,7 @@ object CategoriesController extends Controller with CrudActions[Category, NewCat
     mapping(
       "parentId" -> optional(longNumber),
       "title" -> nonEmptyText,
-      "isHidden" -> checked("если отмечено, категория и минералы в ней не будут видны на сайте"),
+      "isHidden" -> boolean,
       "sortPriority" -> longNumber
     )(NewCategory.apply)(NewCategory.unapply)
   )
