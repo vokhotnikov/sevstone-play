@@ -1,3 +1,4 @@
+
 import org.specs2.mutable._
 
 import play.api.test._
@@ -9,11 +10,14 @@ import models._
 
 import SlickSpecSupport._
 
+import scalaz._
+import Scalaz._
+
 class PickOutPlacesControllerSpec extends Specification {
   "pick out places controller index method" should {
     "display all available places" in memDB { implicit session: Session =>
-      val np1 = NewPickOutPlace("Some imaginary place", "A description")
-      val np2 = NewPickOutPlace("Another place", "Really?!")
+      val np1 = PickOutPlace("Some imaginary place", "A description")
+      val np2 = PickOutPlace("Another place", "Really?!")
 
       PickOutPlaces add np1
       PickOutPlaces add np2
@@ -45,14 +49,14 @@ class PickOutPlacesControllerSpec extends Specification {
     "create new place in database" in memDB { implicit session: Session =>
       val title = "New place 234521"
       val descr = "<p>A descr 9931450</p>"
-      val id = PickOutPlaces add NewPickOutPlace(title, descr)
+      val id = PickOutPlaces add PickOutPlace(title, descr)
 
       val result = controllers.edit.PickOutPlacesController.update(id)(
         FakeRequest().withFormUrlEncodedBody("title" -> (title + "-updated"), "description" -> (descr + "-updated")))
 
       val loaded = PickOutPlaces.findAll.headOption.map(p => (p.id, p.title, p.description))
 
-      loaded must_== Some(id, title + "-updated", descr + "-updated")
+      loaded must_== Some(id.some, title + "-updated", descr + "-updated")
     }
   }
 }

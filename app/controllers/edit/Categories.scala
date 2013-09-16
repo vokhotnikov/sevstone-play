@@ -13,14 +13,15 @@ import models._
 
 import views.html.edit.categories
 
-object CategoriesController extends Controller with CrudActions[Category, NewCategory, List[Category]] {
+object CategoriesController extends Controller with CrudActions[Category, List[Category]] {
   val expositionForm = Form(
     mapping(
       "parentId" -> optional(longNumber),
       "title" -> nonEmptyText,
       "isHidden" -> boolean,
-      "sortPriority" -> longNumber
-    )(NewCategory.apply)(NewCategory.unapply)
+      "sortPriority" -> longNumber,
+      "id" -> optional(longNumber)
+    )(Category.apply)(Category.unapply)
   )
 
   def dalObject = Categories
@@ -46,8 +47,8 @@ object CategoriesController extends Controller with CrudActions[Category, NewCat
   def indexRoute = routes.CategoriesController.indexTree
 
   def indexView[B](implicit request: Request[B], all:List[Category]) = categories.index(all)
-  def createView[B](implicit request: Request[B], form: Form[NewCategory], formSupport: List[Category]) = categories.create(form, formSupport)
-  def editView[B](implicit request: Request[B], a: Category, form: Form[NewCategory], formSupport: List[Category]) = categories.edit(a, form, formSupport)
+  def createView[B](implicit request: Request[B], form: Form[Category], formSupport: List[Category]) = categories.create(form, formSupport)
+  def editView[B](implicit request: Request[B], a: Category, form: Form[Category], formSupport: List[Category]) = categories.edit(a, form, formSupport)
   def notFoundErrorText(details: String) = "Категория не найдена: " + details
 
   def indexTree = Action { implicit request =>

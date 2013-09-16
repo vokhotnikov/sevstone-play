@@ -6,7 +6,7 @@
   } else { 
     <ul class="unstyled">
     @for(p <- expos) {
-      <li class="editable-item"><a href="@controllers.edit.routes.ExpositionsController.edit(p.id)">@p.title</a></li>
+      <li class="editable-item"><a href="@controllers.edit.routes.ExpositionsController.edit(p.id.get)">@p.title</a></li>
     }
     </ul>
   }

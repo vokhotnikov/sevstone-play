@@ -1,4 +1,4 @@
-@(catForm:Form[models.NewCategory], possibleParents: List[models.Category])(implicit flash: Flash)
+@(catForm:Form[models.Category], possibleParents: List[models.Category])(implicit flash: Flash)
 
 @mainedit("Новая категория") {
   @catform(catForm, possibleParents, "Создать", controllers.edit.routes.CategoriesController.save)

@@ -15,16 +15,16 @@ import play.api.db.slick.Config.driver.simple._
 import models.ModelEntity
 import models.CrudSupport
 
-trait CrudActions[A <: ModelEntity[NA], NA, FormSupportData] { self: Controller =>
-  def dalObject: CrudSupport[A, NA]
+trait CrudActions[A <: ModelEntity, FormSupportData] { self: Controller =>
+  def dalObject: CrudSupport[A]
 
-  def crudEditForm: Form[NA]
+  def crudEditForm: Form[A]
 
   def indexRoute: Call
 
   def indexView[B](implicit request: Request[B], all: List[A]): Html
-  def createView[B](implicit request: Request[B], form: Form[NA], formSupport: FormSupportData): Html
-  def editView[B](implicit request: Request[B], a: A, form: Form[NA], formSupport: FormSupportData): Html
+  def createView[B](implicit request: Request[B], form: Form[A], formSupport: FormSupportData): Html
+  def editView[B](implicit request: Request[B], a: A, form: Form[A], formSupport: FormSupportData): Html
 
   def notFoundErrorText(details: String): String
 
@@ -70,7 +70,7 @@ trait CrudActions[A <: ModelEntity[NA], NA, FormSupportData] { self: Controller 
   def edit(id: Long) = Action { implicit request =>
     withExisting(id) { p =>
       DB.withTransaction { implicit session =>
-        Ok(editView(request, p, crudEditForm.fill(p.asNew), constructFormSupportData(Some(p))))
+        Ok(editView(request, p, crudEditForm.fill(p), constructFormSupportData(Some(p))))
       }
     }
   }
@@ -93,7 +93,7 @@ trait CrudActions[A <: ModelEntity[NA], NA, FormSupportData] { self: Controller 
   }
 }
 
-trait SimpleCrudActions[A <: ModelEntity[NA], NA] extends CrudActions[A, NA, Any] { self: Controller =>
+trait SimpleCrudActions[A <: ModelEntity] extends CrudActions[A, Any] { self: Controller =>
   def constructFormSupportData(current: Option[A])(implicit session: Session):Any = None
 }
 

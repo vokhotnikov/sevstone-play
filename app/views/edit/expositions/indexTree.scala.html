@@ -3,7 +3,7 @@
 @renderSubtrees(trees: List[models.Hierarchy[models.Exposition]]) = {
   <ul class="tree-branch">
   @for(p <- trees) {
-    <li class="editable-item"><a href="@controllers.edit.routes.ExpositionsController.edit(p.node.id)">@p.node.title</a>
+    <li class="editable-item"><a href="@controllers.edit.routes.ExpositionsController.edit(p.node.id.get)">@p.node.title</a>
     @if(! p.children.isEmpty) {
       @renderSubtrees(p.children)
     }

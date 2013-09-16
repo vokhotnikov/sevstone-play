@@ -1,10 +1,11 @@
-@(placeForm:Form[models.NewDepositsPlace], saveCaption: String, action: Call, args: (Symbol, String)*)
+@(placeForm:Form[models.DepositsPlace], saveCaption: String, action: Call, args: (Symbol, String)*)
 
 @import helper._
 @import helper.twitterBootstrap._
 
 <div class="row">
   @form(action, args:_*) {
+    <input type="hidden" id="id" name="id" value='@placeForm("id")'></input>
     @inputText(placeForm("title"), '_label -> "Название")
     @textarea(placeForm("description"), '_label -> "Описание", 'rows -> 20, 'class -> "richedit")
     <input type="submit" class="btn btn-primary" value="@saveCaption">

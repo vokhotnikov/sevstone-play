@@ -2,20 +2,17 @@ package models
 
 import play.api.db.slick.Config.driver.simple._
 
-case class NewDepositsPlace(title: String, description: String)
-case class DepositsPlace(id: Long, title: String, description: String) extends ModelEntity[NewDepositsPlace] {
-  def asNew = NewDepositsPlace(title, description)
-}
+case class DepositsPlace(title: String, description: String, id: Option[Long] = None) extends ModelEntity
 
-object DepositsPlaces extends Table[DepositsPlace]("deposits_places") with CrudSupport[DepositsPlace, NewDepositsPlace] {
+object DepositsPlaces extends Table[DepositsPlace]("deposits_places") with CrudSupport[DepositsPlace] {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def title = column[String]("title", O.NotNull)
   def description = column[String]("description", O.NotNull, O.DBType("text"))
 
-  def * = id ~ title ~ description <> (DepositsPlace, DepositsPlace.unapply _)
+  def * = title ~ description ~ id.? <> (DepositsPlace, DepositsPlace.unapply _)
 
-  def forInsert = title ~ description <> (NewDepositsPlace, NewDepositsPlace.unapply _) returning id
-
+  def autoInc = * returning id
+  
   def findById(id: Long)(implicit session:Session) =
     (for { p <- DepositsPlaces if p.id === id } yield p).firstOption
 
@@ -23,9 +20,9 @@ object DepositsPlaces extends Table[DepositsPlace]("deposits_places") with CrudS
     Query(DepositsPlaces).sortBy(_.title.toLowerCase).list
   }
 
-  def add(newPlace: NewDepositsPlace)(implicit session: Session) = forInsert insert newPlace
+  def add(newPlace: DepositsPlace)(implicit session: Session) = autoInc insert newPlace
 
-  def update(id:Long, newValue: NewDepositsPlace)(implicit session: Session) = {
+  def update(id:Long, newValue: DepositsPlace)(implicit session: Session) = {
     val q = for { p <- DepositsPlaces if p.id === id } yield p.title ~ p.description
     q update (newValue.title, newValue.description)
   }

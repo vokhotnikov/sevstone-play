@@ -7,10 +7,13 @@ import play.api.mvc.Flash
 
 import models._
 
+import scalaz._
+import Scalaz._
+
 class PickOutPlacesListViewSpec extends Specification {
   "pick-out places list view" should {
     "render titles for all passed in places" in {
-      val places = List(PickOutPlace(132, "First test place", "<p>111</p>"), PickOutPlace(15, "Second test place", "222"))
+      val places = List(PickOutPlace("First test place", "<p>111</p>", 132l.some), PickOutPlace("Second test place", "222", 15l.some))
       val html = views.html.edit.pickoutplaces.index(places)(new Flash())
       contentAsString(html) must contain("First test place")
       contentAsString(html) must contain("Second test place")

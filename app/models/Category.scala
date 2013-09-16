@@ -2,12 +2,9 @@ package models
 
 import play.api.db.slick.Config.driver.simple._
 
-case class NewCategory(parentId: Option[Long], title: String, isHidden: Boolean, sortPriority: Long)
-case class Category(id: Long, parentId: Option[Long], title: String, isHidden: Boolean, sortPriority: Long) extends HierarchicalEntity[NewCategory] {
-  def asNew = NewCategory(parentId, title, isHidden, sortPriority)
-}
+case class Category(parentId: Option[Long], title: String, isHidden: Boolean, sortPriority: Long, id: Option[Long] = None) extends HierarchicalEntity
 
-object Categories extends Table[Category]("categories") with CrudSupport[Category, NewCategory] {
+object Categories extends Table[Category]("categories") with CrudSupport[Category] {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def parentId = column[Option[Long]]("parent_id")
   def title = column[String]("title", O.NotNull)
@@ -16,9 +13,9 @@ object Categories extends Table[Category]("categories") with CrudSupport[Categor
 
   def parent = foreignKey("Categories_ParentFK", parentId, Categories)(_.id)
 
-  def * = id ~ parentId ~ title ~ isHidden ~ sortPriority <> (Category, Category.unapply _)
+  def * = parentId ~ title ~ isHidden ~ sortPriority ~ id.? <> (Category, Category.unapply _)
 
-  def forInsert = parentId ~ title ~ isHidden ~ sortPriority <> (NewCategory, NewCategory.unapply _) returning id
+  def autoInc = * returning id
 
   def findById(id: Long)(implicit session:Session) =
     (for { p <- Categories if p.id === id } yield p).firstOption
@@ -27,9 +24,9 @@ object Categories extends Table[Category]("categories") with CrudSupport[Categor
     Query(Categories).sortBy(_.title.toLowerCase).list
   }
 
-  def add(newCategory: NewCategory)(implicit session: Session) = forInsert insert newCategory
+  def add(newCategory: Category)(implicit session: Session) = autoInc insert newCategory
 
-  def update(id:Long, newValue: NewCategory)(implicit session: Session) = {
+  def update(id:Long, newValue: Category)(implicit session: Session) = {
     val q = for { p <- Categories if p.id === id } yield p.parentId ~ p.title ~ p.isHidden ~ p.sortPriority
     q update ((newValue.parentId, newValue.title, newValue.isHidden, newValue.sortPriority))
   }

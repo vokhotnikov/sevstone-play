@@ -1,10 +1,11 @@
-@(categoryForm:Form[models.NewCategory], possibleParents: List[models.Category], saveCaption: String, action: Call, args: (Symbol, String)*)
+@(categoryForm:Form[models.Category], possibleParents: List[models.Category], saveCaption: String, action: Call, args: (Symbol, String)*)
 
 @import helper._
 @import helper.twitterBootstrap._
 
 <div class="row">
   @form(action, args:_*) {
+    <input type="hidden" id="id" name="id" value='@categoryForm("id")'></input>
     @inputText(categoryForm("title"), '_label -> "Название")
     <div class="chosen">
       @select(categoryForm("parentId"), Seq(("", "- без родителя -")) ++ possibleParents.map(p => (p.id.toString, p.title)), '_label -> "Родитель", 'class -> "chzn-select")

@@ -13,14 +13,15 @@ import models._
 
 import views.html.edit.expositions
 
-object ExpositionsController extends Controller with CrudActions[Exposition, NewExposition, List[Exposition]] {
+object ExpositionsController extends Controller with CrudActions[Exposition, List[Exposition]] {
   val expositionForm = Form(
     mapping(
       "parentId" -> optional(longNumber),
       "title" -> nonEmptyText,
       "description" -> text,
-      "sortPriority" -> longNumber
-    )(NewExposition.apply)(NewExposition.unapply)
+      "sortPriority" -> longNumber,
+      "id" -> optional(longNumber)
+    )(Exposition.apply)(Exposition.unapply)
   )
 
   def dalObject = Expositions
@@ -46,8 +47,8 @@ object ExpositionsController extends Controller with CrudActions[Exposition, New
   def indexRoute = routes.ExpositionsController.indexTree
 
   def indexView[B](implicit request: Request[B], all:List[Exposition]) = expositions.index(all)
-  def createView[B](implicit request: Request[B], form: Form[NewExposition], formSupport: List[Exposition]) = expositions.create(form, formSupport)
-  def editView[B](implicit request: Request[B], a: Exposition, form: Form[NewExposition], formSupport: List[Exposition]) = expositions.edit(a, form, formSupport)
+  def createView[B](implicit request: Request[B], form: Form[Exposition], formSupport: List[Exposition]) = expositions.create(form, formSupport)
+  def editView[B](implicit request: Request[B], a: Exposition, form: Form[Exposition], formSupport: List[Exposition]) = expositions.edit(a, form, formSupport)
   def notFoundErrorText(details: String) = "Экспозиция не найдена: " + details
 
   def indexTree = Action { implicit request =>

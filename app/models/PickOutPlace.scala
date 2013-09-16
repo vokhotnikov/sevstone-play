@@ -2,20 +2,17 @@ package models
 
 import play.api.db.slick.Config.driver.simple._
 
-case class NewPickOutPlace(title: String, description: String)
-case class PickOutPlace(id: Long, title: String, description: String) extends ModelEntity[NewPickOutPlace] {
-  def asNew = NewPickOutPlace(title, description)
-}
+case class PickOutPlace(title: String, description: String, id: Option[Long] = None) extends ModelEntity
 
-object PickOutPlaces extends Table[PickOutPlace]("pick_out_places")  with CrudSupport[PickOutPlace, NewPickOutPlace]{
+object PickOutPlaces extends Table[PickOutPlace]("pick_out_places")  with CrudSupport[PickOutPlace]{
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def title = column[String]("title", O.NotNull)
   def description = column[String]("description", O.NotNull, O.DBType("text"))
 
-  def * = id ~ title ~ description <> (PickOutPlace, PickOutPlace.unapply _)
+  def * = title ~ description ~ id.? <> (PickOutPlace, PickOutPlace.unapply _)
 
-  def forInsert = title ~ description <> (NewPickOutPlace, NewPickOutPlace.unapply _) returning id
-
+  def autoInc = * returning id
+  
   def findById(id: Long)(implicit session:Session) =
     (for { p <- PickOutPlaces if p.id === id } yield p).firstOption
 
@@ -23,9 +20,9 @@ object PickOutPlaces extends Table[PickOutPlace]("pick_out_places")  with CrudSu
     Query(PickOutPlaces).sortBy(_.title.toLowerCase).list
   }
 
-  def add(newPlace: NewPickOutPlace)(implicit session: Session) = forInsert insert newPlace
+  def add(newPlace: PickOutPlace)(implicit session: Session) = autoInc insert newPlace
 
-  def update(id:Long, newValue: NewPickOutPlace)(implicit session: Session) = {
+  def update(id:Long, newValue: PickOutPlace)(implicit session: Session) = {
     val q = for { p <- PickOutPlaces if p.id === id } yield p.title ~ p.description
     q update (newValue.title, newValue.description)
   }

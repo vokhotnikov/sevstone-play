@@ -1,5 +1,5 @@
-@(place:models.PickOutPlace, placeForm:Form[models.NewPickOutPlace])(implicit flash: Flash)
+@(place:models.PickOutPlace, placeForm:Form[models.PickOutPlace])(implicit flash: Flash)
 
 @mainedit(place.title) {
-  @placeform(placeForm, "Сохранить изменения", controllers.edit.routes.PickOutPlacesController.update(place.id))
+  @placeform(placeForm, "Сохранить изменения", controllers.edit.routes.PickOutPlacesController.update(place.id.get))
 }

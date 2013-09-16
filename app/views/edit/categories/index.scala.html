@@ -6,7 +6,7 @@
   } else { 
     <ul class="unstyled">
     @for(p <- cats) {
-      <li class="editable-item"><a href="@controllers.edit.routes.CategoriesController.edit(p.id)">@p.title</a></li>
+      <li class="editable-item"><a href="@controllers.edit.routes.CategoriesController.edit(p.id.get)">@p.title</a></li>
     }
     </ul>
   }

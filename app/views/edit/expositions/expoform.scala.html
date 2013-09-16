@@ -1,10 +1,11 @@
-@(expoForm:Form[models.NewExposition], possibleParents: List[models.Exposition], saveCaption: String, action: Call, args: (Symbol, String)*)
+@(expoForm:Form[models.Exposition], possibleParents: List[models.Exposition], saveCaption: String, action: Call, args: (Symbol, String)*)
 
 @import helper._
 @import helper.twitterBootstrap._
 
 <div class="row">
   @form(action, args:_*) {
+    <input type="hidden" id="id" name="id" value='@expoForm("id")'></input>
     @inputText(expoForm("title"), '_label -> "Название")
     <div class="chosen">
       @select(expoForm("parentId"), Seq(("", "- без родителя -")) ++ possibleParents.map(p => (p.id.toString, p.title)), '_label -> "Родитель", 'class -> "chzn-select")

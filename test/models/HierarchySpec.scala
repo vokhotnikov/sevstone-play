@@ -2,11 +2,11 @@ package models
 
 import org.specs2.mutable._
 
+import scalaz._
+import Scalaz._
+
 class HierarchySpec extends Specification {
-  case class NewRecord(name: String)
-  case class Record(id: Long, parentId: Option[Long], sortPriority: Long, name: String) extends HierarchicalEntity[NewRecord] {
-    def asNew = NewRecord(name)
-  }
+  case class Record(id: Option[Long], parentId: Option[Long], sortPriority: Long, name: String) extends HierarchicalEntity
 
   "Hierarchy case class" should {
     "return empty list when constructing hierarchy from empty list" in {
@@ -15,30 +15,30 @@ class HierarchySpec extends Specification {
     }
 
     "return single record as subtree without children and parent" in {
-      val r = Record(12, None, 0, "aa")
+      val r = Record(12l.some, None, 0, "aa")
 
       val subtrees = Hierarchy(List(r))
       subtrees must contain(Hierarchy(r, None, List())).only
     }
 
     "return single record as subtree without children and parent even if parentId is set" in {
-      val r = Record(12, Some(100), 0, "aa")
+      val r = Record(12l.some, 100l.some, 0, "aa")
 
       val subtrees = Hierarchy(List(r))
       subtrees must contain(Hierarchy(r, None, List())).only
     }
 
     "return two unrelated records as two subtrees without children and parent" in {
-      val r1 = Record(12, None, 0, "aa")
-      val r2 = Record(100, None, 0, "bb")
+      val r1 = Record(12l.some, None, 0, "aa")
+      val r2 = Record(100l.some, None, 0, "bb")
 
       val subtrees = Hierarchy(List(r1, r2))
       subtrees must contain(Hierarchy(r1, None, List()), Hierarchy(r2, None, List())).only
     }
 
     "return two related records as single hierarchy" in {
-      val r1 = Record(12, None, 0, "aa")
-      val r2 = Record(100, Some(12), 0, "bb")
+      val r1 = Record(12l.some, None, 0, "aa")
+      val r2 = Record(100l.some, 12l.some, 0, "bb")
 
       val subtrees = Hierarchy(List(r1, r2))
       subtrees must contain(Hierarchy(r1, None, List(Hierarchy(r2, Some(r1), List())))).only
@@ -48,8 +48,8 @@ class HierarchySpec extends Specification {
     }
 
     "return two related records as single hierarchy event if parentId is set" in {
-      val r1 = Record(12, Some(200), 0, "aa")
-      val r2 = Record(100, Some(12), 0, "bb")
+      val r1 = Record(12l.some, 200l.some, 0, "aa")
+      val r2 = Record(100l.some, 12l.some, 0, "bb")
 
       val subtrees = Hierarchy(List(r1, r2))
       subtrees must contain(Hierarchy(r1, None, List(Hierarchy(r2, Some(r1), List())))).only
@@ -59,9 +59,9 @@ class HierarchySpec extends Specification {
     }
 
     "return children in correct order" in {
-      var r = Record(10, None, 300, "root")
-      val r1 = Record(12, Some(10), 200, "aa")
-      val r2 = Record(100, Some(10), 100, "bb")
+      var r = Record(10l.some, None, 300, "root")
+      val r1 = Record(12l.some, 10l.some, 200, "aa")
+      val r2 = Record(100l.some, 10l.some, 100, "bb")
 
       val subtrees = Hierarchy(List(r1, r2, r))
       subtrees must contain(Hierarchy(r, None, List(
@@ -73,8 +73,8 @@ class HierarchySpec extends Specification {
     }
 
     "return parents in correct order" in {
-      val r1 = Record(12, None, 200, "aa")
-      val r2 = Record(100, None, 100, "bb")
+      val r1 = Record(12l.some, None, 200, "aa")
+      val r2 = Record(100l.some, None, 100, "bb")
 
       val subtrees = Hierarchy(List(r1, r2))
       subtrees must contain(Hierarchy(r2, None, List()), Hierarchy(r1, None, List())).inOrder
@@ -84,9 +84,9 @@ class HierarchySpec extends Specification {
     }
 
     "support multi-level hierarchy" in {
-      var r = Record(10, None, 300, "root")
-      val r1 = Record(12, Some(10), 200, "aa")
-      val r2 = Record(100, Some(12), 100, "bb")
+      var r = Record(10l.some, None, 300, "root")
+      val r1 = Record(12l.some, 10l.some, 200, "aa")
+      val r2 = Record(100l.some, 12l.some, 100, "bb")
 
       val subtrees = Hierarchy(List(r1, r2, r))
       subtrees must contain(Hierarchy(r, None, List(
@@ -98,10 +98,10 @@ class HierarchySpec extends Specification {
     }
 
     "return subtree by predicate" in {
-      val r = Record(10, None, 1, "root");
-      val r1 = Record(20, Some(10), 1, "subtree");
-      val r2 = Record(30, Some(20), 1, "leaf");
-      val r3 = Record(25, Some(10), 3, "subleaf")
+      val r = Record(10l.some, None, 1, "root");
+      val r1 = Record(20l.some, 10l.some, 1, "subtree");
+      val r2 = Record(30l.some, 20l.some, 1, "leaf");
+      val r3 = Record(25l.some, 10l.some, 3, "subleaf")
 
       val tree = Hierarchy(List(r, r1, r2, r3)).head
 
