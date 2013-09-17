@@ -2,7 +2,9 @@ package models
 
 import play.api.db.slick.Config.driver.simple._
 
-case class Category(parentId: Option[Long], title: String, isHidden: Boolean, sortPriority: Long, id: Option[Long] = None) extends HierarchicalEntity
+case class Category(parentId: Option[Long], title: String, isHidden: Boolean, sortPriority: Long, id: Option[Long] = None) extends HierarchicalEntity[Category] {
+  def withId(newId: Option[Long]) = copy(id = newId)
+}
 
 object Categories extends Table[Category]("categories") with CrudSupport[Category] {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -15,20 +17,8 @@ object Categories extends Table[Category]("categories") with CrudSupport[Categor
 
   def * = parentId ~ title ~ isHidden ~ sortPriority ~ id.? <> (Category, Category.unapply _)
 
-  def autoInc = * returning id
-
-  def findById(id: Long)(implicit session:Session) =
-    (for { p <- Categories if p.id === id } yield p).firstOption
-
   def findAll(implicit session: Session) = {
     Query(Categories).sortBy(_.title.toLowerCase).list
-  }
-
-  def add(newCategory: Category)(implicit session: Session) = autoInc insert newCategory
-
-  def update(id:Long, newValue: Category)(implicit session: Session) = {
-    val q = for { p <- Categories if p.id === id } yield p.parentId ~ p.title ~ p.isHidden ~ p.sortPriority
-    q update ((newValue.parentId, newValue.title, newValue.isHidden, newValue.sortPriority))
   }
 
   def loadHierarchies(implicit session: Session) = Hierarchy(findAll)

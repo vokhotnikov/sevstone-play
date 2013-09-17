@@ -1,9 +1,9 @@
+package util
+
 import play.api.test._
 import play.api.test.Helpers._
-
 import play.api.Play.current
 import play.api.db.slick.Config.driver.simple._
-
 import models._
 
 object SlickSpecSupport {

@@ -1,18 +1,17 @@
+package controllers.edit
 
 import org.specs2.mutable._
-
 import play.api.test._
 import play.api.test.Helpers._
-
 import play.api.db.slick.Config.driver.simple._
-
 import models._
-
-import SlickSpecSupport._
-
 import scalaz._
 import Scalaz._
+import org.junit.runner.RunWith
+import org.specs2.runner.JUnitRunner
+import util.SlickSpecSupport._
 
+@RunWith(classOf[JUnitRunner])
 class PickOutPlacesControllerSpec extends Specification {
   "pick out places controller index method" should {
     "display all available places" in memDB { implicit session: Session =>
@@ -46,7 +45,7 @@ class PickOutPlacesControllerSpec extends Specification {
   }
 
   "update existing pick out place method" should {
-    "create new place in database" in memDB { implicit session: Session =>
+    "update place details in database" in memDB { implicit session: Session =>
       val title = "New place 234521"
       val descr = "<p>A descr 9931450</p>"
       val id = PickOutPlaces add PickOutPlace(title, descr)

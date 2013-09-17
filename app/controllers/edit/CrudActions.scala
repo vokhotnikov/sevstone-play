@@ -15,7 +15,7 @@ import play.api.db.slick.Config.driver.simple._
 import models.ModelEntity
 import models.CrudSupport
 
-trait CrudActions[A <: ModelEntity, FormSupportData] { self: Controller =>
+trait CrudActions[A <: ModelEntity[A], FormSupportData] { self: Controller =>
   def dalObject: CrudSupport[A]
 
   def crudEditForm: Form[A]
@@ -93,7 +93,7 @@ trait CrudActions[A <: ModelEntity, FormSupportData] { self: Controller =>
   }
 }
 
-trait SimpleCrudActions[A <: ModelEntity] extends CrudActions[A, Any] { self: Controller =>
+trait SimpleCrudActions[A <: ModelEntity[A]] extends CrudActions[A, Any] { self: Controller =>
   def constructFormSupportData(current: Option[A])(implicit session: Session):Any = None
 }
 

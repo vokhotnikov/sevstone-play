@@ -1,14 +1,15 @@
-import org.specs2.mutable._
+package models
 
+import org.specs2.mutable._
 import play.api.test._
 import play.api.test.Helpers._
-
 import play.api.db.slick.Config.driver.simple._
-
 import models._
+import util.SlickSpecSupport._
+import org.junit.runner.RunWith
+import org.specs2.runner.JUnitRunner
 
-import SlickSpecSupport._
-
+@RunWith(classOf[JUnitRunner])
 class CategorySpec extends Specification with CrudSpecification[Category] {
   def dalObject = Categories
 
@@ -37,7 +38,7 @@ class CategorySpec extends Specification with CrudSpecification[Category] {
       val l3 = Categories findById id3
 
       loaded must contain(Hierarchy(l2.get, None, List()),
-        Hierarchy(l1.get, None, List(Hierarchy(l3.get, l1, List())))).only.inOrder
+        Hierarchy(l1.get, None, List(Hierarchy(l3.get, l1, List())))).exactly.inOrder
     }
   }
 }

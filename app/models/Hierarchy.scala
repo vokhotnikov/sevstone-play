@@ -3,12 +3,12 @@ package models
 import scala.annotation.tailrec
 import scala.language.postfixOps
 
-trait HierarchicalEntity extends ModelEntity {
+trait HierarchicalEntity[E <: HierarchicalEntity[E]] extends ModelEntity[E] { self: E =>
   def parentId: Option[Long]
   def sortPriority: Long
 }
 
-case class Hierarchy[A <: HierarchicalEntity](node: A, parent: Option[A], children: List[Hierarchy[A]]) {
+case class Hierarchy[A <: HierarchicalEntity[A]](node: A, parent: Option[A], children: List[Hierarchy[A]]) {
   def findSubtree(predicate:(A => Boolean)):Option[Hierarchy[A]] = {
     if (predicate(node)) Some(this) else children.flatMap{_.findSubtree(predicate)}.headOption
   }
@@ -19,7 +19,7 @@ case class Hierarchy[A <: HierarchicalEntity](node: A, parent: Option[A], childr
 }
 
 object Hierarchy {
-  def apply[A <: HierarchicalEntity](records: List[A]):List[Hierarchy[A]] = {
+  def apply[A <: HierarchicalEntity[A]](records: List[A]):List[Hierarchy[A]] = {
     val flattened = records map { Hierarchy[A](_, None, List()) }
 
     def sortLevel(subtrees: List[Hierarchy[A]]) = subtrees sortBy { _.node.sortPriority }

@@ -1,18 +1,17 @@
+package models
 
 import org.specs2.mutable._
-
 import play.api.test._
 import play.api.test.Helpers._
-
 import play.api.db.slick.Config.driver.simple._
-
 import models._
-
-import SlickSpecSupport._
-
+import util.SlickSpecSupport._
 import scalaz._
 import Scalaz._
+import org.junit.runner.RunWith
+import org.specs2.runner.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class DepositsPlaceSpec extends Specification with CrudSpecification[DepositsPlace] {
   def dalObject = DepositsPlaces
 

@@ -1,15 +1,13 @@
+package models
+
 import org.specs2.mutable.Specification
-
 import play.api.db.slick.Config.driver.simple.Session
-
 import models._
-
-import SlickSpecSupport._
-
 import scalaz._
 import Scalaz._
+import util.SlickSpecSupport._
 
-trait CrudSpecification[A <: ModelEntity] { self: Specification =>
+trait CrudSpecification[A <: ModelEntity[A]] { self: Specification =>
   def dalObject: CrudSupport[A]
 
   def makeANewValue(suffix: String): A

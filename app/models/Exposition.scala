@@ -2,7 +2,9 @@ package models
 
 import play.api.db.slick.Config.driver.simple._
 
-case class Exposition(parentId: Option[Long], title: String, description: String, sortPriority: Long, id: Option[Long] = None) extends HierarchicalEntity
+case class Exposition(parentId: Option[Long], title: String, description: String, sortPriority: Long, id: Option[Long] = None) extends HierarchicalEntity[Exposition] {
+  def withId(newId: Option[Long]) = copy(id = newId)
+}
 
 object Expositions extends Table[Exposition]("expositions") with CrudSupport[Exposition] {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -15,20 +17,8 @@ object Expositions extends Table[Exposition]("expositions") with CrudSupport[Exp
 
   def * = parentId ~ title ~ description ~ sortPriority ~ id.? <> (Exposition, Exposition.unapply _)
 
-  def autoInc = * returning id
-
-  def findById(id: Long)(implicit session:Session) =
-    (for { p <- Expositions if p.id === id } yield p).firstOption
-
   def findAll(implicit session: Session) = {
     Query(Expositions).sortBy(_.title.toLowerCase).list
-  }
-
-  def add(newPlace: Exposition)(implicit session: Session) = autoInc insert newPlace
-
-  def update(id:Long, newValue: Exposition)(implicit session: Session) = {
-    val q = for { p <- Expositions if p.id === id } yield p.parentId ~ p.title ~ p.description ~ p.sortPriority
-    q update ((newValue.parentId, newValue.title, newValue.description, newValue.sortPriority))
   }
 
   def loadHierarchies(implicit session: Session) = Hierarchy(findAll)
