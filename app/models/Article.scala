@@ -1,7 +1,6 @@
 package models
 
 import play.api.db.slick.Config.driver.simple._
-import java.sql.Date
 import org.joda.time.DateTime
 import java.sql.Timestamp
 
