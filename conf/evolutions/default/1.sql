@@ -3,13 +3,13 @@
 
 # --- !Ups
 
-create table "articles" ("title" VARCHAR(254) NOT NULL,"summary" text NOT NULL,"text" text NOT NULL,"image_id" BIGINT NOT NULL,"added_at" DATE NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
+create table "articles" ("title" VARCHAR(254) NOT NULL,"summary" text NOT NULL,"text" text NOT NULL,"image_id" BIGINT NOT NULL,"added_at" timestamp NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
 create table "categories" ("parent_id" BIGINT,"title" VARCHAR(254) NOT NULL,"is_hidden" BOOLEAN NOT NULL,"sort_priority" BIGINT DEFAULT 0 NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
 create table "deposits_places" ("title" VARCHAR(254) NOT NULL,"description" text NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
 create table "expositions" ("parent_id" BIGINT,"title" VARCHAR(254) NOT NULL,"description" text NOT NULL,"sort_priority" BIGINT DEFAULT 0 NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
 create table "images" ("url" VARCHAR(254) NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
 create table "pick_out_places" ("title" VARCHAR(254) NOT NULL,"description" text NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
-create table "testimonials" ("author_name" VARCHAR(254) NOT NULL,"author_email" VARCHAR(254),"text" text NOT NULL,"added_at" DATE NOT NULL,"is_approved" BOOLEAN NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
+create table "testimonials" ("author_name" VARCHAR(254) NOT NULL,"author_email" VARCHAR(254),"text" text NOT NULL,"added_at" TIMESTAMP NOT NULL,"is_approved" BOOLEAN NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);
 alter table "articles" add constraint "Articles_ImageFK" foreign key("image_id") references "images"("id") on update NO ACTION on delete NO ACTION;
 alter table "categories" add constraint "Categories_ParentFK" foreign key("parent_id") references "categories"("id") on update NO ACTION on delete NO ACTION;
 alter table "expositions" add constraint "Expositions_ParentFK" foreign key("parent_id") references "expositions"("id") on update NO ACTION on delete NO ACTION;
