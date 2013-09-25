@@ -13,7 +13,7 @@ import models._
 
 import views.html.edit.expositions
 
-object ExpositionsController extends Controller with CrudActions[Exposition, List[Exposition]] {
+object ExpositionsController extends Controller with CrudActions[Exposition, List[Exposition]] with securesocial.core.SecureSocial {
   val expositionForm = Form(
     mapping(
       "parentId" -> optional(longNumber),
@@ -51,7 +51,7 @@ object ExpositionsController extends Controller with CrudActions[Exposition, Lis
   def editView[B](implicit request: Request[B], a: Exposition, form: Form[Exposition], formSupport: List[Exposition]) = expositions.edit(a, form, formSupport)
   def notFoundErrorText(details: String) = "Экспозиция не найдена: " + details
 
-  def indexTree = Action { implicit request =>
+  def indexTree = SecuredAction { implicit request =>
     DB.withTransaction { implicit session =>
       val expos = Expositions.loadHierarchies
       Ok(expositions.indexTree(expos))

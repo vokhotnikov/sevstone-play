@@ -15,22 +15,22 @@ create table "testimonials" ("author_name" VARCHAR(254) NOT NULL,"author_email" 
 alter table "articles" add constraint "Articles_ImageFK" foreign key("image_id") references "images"("id") on update NO ACTION on delete NO ACTION;
 alter table "categories" add constraint "Categories_ParentFK" foreign key("parent_id") references "categories"("id") on update NO ACTION on delete NO ACTION;
 alter table "expositions" add constraint "Expositions_ParentFK" foreign key("parent_id") references "expositions"("id") on update NO ACTION on delete NO ACTION;
-alter table "specimen_photos" add constraint "SpecimenPhotos_ImageFK" foreign key("image_id") references "images"("id") on update NO ACTION on delete NO ACTION;
 alter table "specimen_photos" add constraint "SpecimenPhotos_SpecimenFK" foreign key("specimen_id") references "specimens"("id") on update NO ACTION on delete NO ACTION;
+alter table "specimen_photos" add constraint "SpecimenPhotos_ImageFK" foreign key("image_id") references "images"("id") on update NO ACTION on delete NO ACTION;
 alter table "specimens" add constraint "Specimens_CategoryFK" foreign key("category_id") references "categories"("id") on update NO ACTION on delete NO ACTION;
-alter table "specimens" add constraint "Specimens_DepositsPlaceFK" foreign key("deposits_place_id") references "deposits_places"("id") on update NO ACTION on delete NO ACTION;
 alter table "specimens" add constraint "Specimens_ExpositionFK" foreign key("exposition_id") references "expositions"("id") on update NO ACTION on delete NO ACTION;
+alter table "specimens" add constraint "Specimens_DepositsPlaceFK" foreign key("deposits_place_id") references "deposits_places"("id") on update NO ACTION on delete NO ACTION;
 
 # --- !Downs
 
 alter table "articles" drop constraint "Articles_ImageFK";
 alter table "categories" drop constraint "Categories_ParentFK";
 alter table "expositions" drop constraint "Expositions_ParentFK";
-alter table "specimen_photos" drop constraint "SpecimenPhotos_ImageFK";
 alter table "specimen_photos" drop constraint "SpecimenPhotos_SpecimenFK";
+alter table "specimen_photos" drop constraint "SpecimenPhotos_ImageFK";
 alter table "specimens" drop constraint "Specimens_CategoryFK";
-alter table "specimens" drop constraint "Specimens_DepositsPlaceFK";
 alter table "specimens" drop constraint "Specimens_ExpositionFK";
+alter table "specimens" drop constraint "Specimens_DepositsPlaceFK";
 drop table "articles";
 drop table "categories";
 drop table "deposits_places";

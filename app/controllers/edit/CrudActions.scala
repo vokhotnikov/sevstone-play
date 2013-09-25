@@ -15,7 +15,7 @@ import play.api.db.slick.Config.driver.simple._
 import models.ModelEntity
 import models.CrudSupport
 
-trait CrudActions[A <: ModelEntity[A], FormSupportData] { self: Controller =>
+trait CrudActions[A <: ModelEntity[A], FormSupportData] { self: Controller with securesocial.core.SecureSocial =>
   def dalObject: CrudSupport[A]
 
   def crudEditForm: Form[A]
@@ -40,19 +40,19 @@ trait CrudActions[A <: ModelEntity[A], FormSupportData] { self: Controller =>
     }
   }
 
-  def index = Action { implicit request =>
+  def index = SecuredAction { implicit request =>
     DB.withTransaction { implicit session =>
       Ok(indexView(request, dalObject.findAll))
     }
   }
 
-  def create = Action { implicit request =>
+  def create = SecuredAction { implicit request =>
     DB.withTransaction { implicit session =>
       Ok(createView(request, crudEditForm, constructFormSupportData(None)))
     }
   }
 
-  def save = Action { implicit request =>
+  def save = SecuredAction { implicit request =>
     crudEditForm.bindFromRequest.fold(
       errors => {
         DB.withTransaction { implicit session: Session =>
@@ -67,7 +67,7 @@ trait CrudActions[A <: ModelEntity[A], FormSupportData] { self: Controller =>
       })
   }
 
-  def edit(id: Long) = Action { implicit request =>
+  def edit(id: Long) = SecuredAction { implicit request =>
     withExisting(id) { p =>
       DB.withTransaction { implicit session =>
         Ok(editView(request, p, crudEditForm.fill(p), constructFormSupportData(Some(p))))
@@ -75,7 +75,7 @@ trait CrudActions[A <: ModelEntity[A], FormSupportData] { self: Controller =>
     }
   }
 
-  def update(id:Long) = Action { implicit request =>
+  def update(id:Long) = SecuredAction { implicit request =>
     crudEditForm.bindFromRequest.fold(
       errors => {
         withExisting(id) { p =>
@@ -93,7 +93,7 @@ trait CrudActions[A <: ModelEntity[A], FormSupportData] { self: Controller =>
   }
 }
 
-trait SimpleCrudActions[A <: ModelEntity[A]] extends CrudActions[A, Any] { self: Controller =>
+trait SimpleCrudActions[A <: ModelEntity[A]] extends CrudActions[A, Any] { self: Controller with securesocial.core.SecureSocial =>
   def constructFormSupportData(current: Option[A])(implicit session: Session):Any = None
 }
 

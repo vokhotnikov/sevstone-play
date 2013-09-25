@@ -13,7 +13,7 @@ import models._
 
 import views.html.edit.categories
 
-object CategoriesController extends Controller with CrudActions[Category, List[Category]] {
+object CategoriesController extends Controller with CrudActions[Category, List[Category]] with securesocial.core.SecureSocial {
   val expositionForm = Form(
     mapping(
       "parentId" -> optional(longNumber),
@@ -51,7 +51,7 @@ object CategoriesController extends Controller with CrudActions[Category, List[C
   def editView[B](implicit request: Request[B], a: Category, form: Form[Category], formSupport: List[Category]) = categories.edit(a, form, formSupport)
   def notFoundErrorText(details: String) = "Категория не найдена: " + details
 
-  def indexTree = Action { implicit request =>
+  def indexTree = SecuredAction { implicit request =>
     DB.withTransaction { implicit session =>
       val expos = Categories.loadHierarchies
       Ok(categories.indexTree(expos))

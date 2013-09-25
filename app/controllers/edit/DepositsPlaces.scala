@@ -10,7 +10,7 @@ import models._
 
 import views.html.edit.depositsplaces
 
-object DepositsPlacesController extends Controller with SimpleCrudActions[DepositsPlace] {
+object DepositsPlacesController extends Controller with SimpleCrudActions[DepositsPlace] with securesocial.core.SecureSocial {
   val depositsPlaceForm = Form(
     mapping(
       "title" -> nonEmptyText,

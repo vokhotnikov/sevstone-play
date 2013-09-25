@@ -10,7 +10,7 @@ import models._
 
 import views.html.edit.pickoutplaces
 
-object PickOutPlacesController extends Controller with SimpleCrudActions[PickOutPlace] {
+object PickOutPlacesController extends Controller with SimpleCrudActions[PickOutPlace] with securesocial.core.SecureSocial {
   val pickOutPlaceForm = Form(
     mapping(
       "title" -> nonEmptyText,
