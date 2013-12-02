@@ -1,5 +1,0 @@
-@(cat:models.Category, catForm:Form[models.Category], possibleParents: List[models.Category])(implicit flash: Flash)
-
-@mainedit(cat.title) {
-  @catform(catForm, possibleParents, "Сохранить изменения", controllers.edit.routes.CategoriesController.update(cat.id.get))
-}

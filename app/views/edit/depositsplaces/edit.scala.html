@@ -1,5 +1,0 @@
-@(place:models.DepositsPlace, placeForm:Form[models.DepositsPlace])(implicit flash: Flash)
-
-@mainedit(place.title) {
-  @placeform(placeForm, "Сохранить изменения", controllers.edit.routes.DepositsPlacesController.update(place.id.get))
-}

@@ -1,5 +1,0 @@
-@(placeForm:Form[models.DepositsPlace])(implicit flash: Flash)
-
-@mainedit("Новое месторождение") {
-  @placeform(placeForm, "Создать", controllers.edit.routes.DepositsPlacesController.save)
-}
