@@ -8,11 +8,19 @@ class Dao(override val profile: ExtendedProfile)
   extends TestimonialComponent
   with ArticleComponent
   with ImageComponent
+  with SpecimenComponent
+  with CategoryComponent
+  with ExpositionComponent
+  with DepositsPlaceComponent
   with Profile {
 
   val Testimonials = new Testimonials
   val Articles = new Articles
   val Images = new Images
+  val Specimens = new Specimens
+  val Categories = new Categories
+  val Expositions = new Expositions
+  val DepositsPlaces = new DepositsPlaces
 }
 
 object current {

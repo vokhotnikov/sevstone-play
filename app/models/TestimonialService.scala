@@ -7,7 +7,7 @@ import models.dao.TestimonialRecord
 case class Testimonial(authorName: String, authorEmail: Option[String], text: String, addedAt: DateTime, isApproved: Boolean)
 
 trait TestimonialsComponent {
-  class TestimonialService {
+  class TestimonialService extends BasicServiceOps[Testimonial] {
     object daoMapping {
       import scala.language.implicitConversions
       
@@ -23,6 +23,10 @@ trait TestimonialsComponent {
     def latestTestimonials(limit: Int)(implicit session: Session): List[Loaded[Testimonial]] = {
       Query(daoService.Testimonials).filter(_.isApproved).sortBy(_.addedAt.desc).take(limit).list.map(mapToLoaded)
     }
+    
+    private val byId = daoService.Testimonials.createFinderBy(_.id)
+    
+    def findById(id: Long)(implicit session: Session) = byId(id).firstOption.map(mapToLoaded)
     
     def add(testimonial: Testimonial)(implicit session: Session): Long = {
       daoService.Testimonials.autoInc insert mapToRecord(testimonial)
