@@ -30,6 +30,7 @@ trait ArticlesComponent { this: ImagesComponent =>
       
     def add(article: Article)(implicit session: Session) = daoService.Articles.autoInc insert article
     
-    def latestArticles(limit: Int)(implicit session: Session) = List()
+    def latestArticles(limit: Int)(implicit session: Session) = 
+      Query(daoService.Articles).sortBy(_.addedAt.desc).take(limit).list.map(mapToLoaded)
   }
 }
