@@ -33,8 +33,10 @@ class TestimonialServiceSpec extends Specification {
   }
   
   trait TestData extends TestimonialsComponent { this: Scope =>
-    val service = new TestimonialService
+    val TestimonialService = new TestimonialService
     
+    val service = TestimonialService
+
     val t1 = new Testimonial("Vasya Pupkin", Some("vasya@pupkin.com"), "great site!", DateTime.now, true)
     val t2 = new Testimonial("Glafira Kukushkina", None, "Never saw anything like that", DateTime.now - 2.months, true)
     val t3 = new Testimonial("Robot", Some("robot@mail.mail.mail"), "beep-beep", DateTime.now - 9.weeks, true)

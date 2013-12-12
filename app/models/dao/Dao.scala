@@ -12,6 +12,7 @@ class Dao(override val profile: ExtendedProfile)
   with CategoryComponent
   with ExpositionComponent
   with DepositsPlaceComponent
+  with SpecimenPhotoComponent
   with Profile {
 
   val Testimonials = new Testimonials
@@ -21,6 +22,7 @@ class Dao(override val profile: ExtendedProfile)
   val Categories = new Categories
   val Expositions = new Expositions
   val DepositsPlaces = new DepositsPlaces
+  val SpecimenPhotos = new SpecimenPhotos
 }
 
 object current {

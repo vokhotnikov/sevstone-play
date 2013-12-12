@@ -32,9 +32,11 @@ class ArticleServiceSpec extends Specification {
   }
 
   trait TestData extends ArticlesComponent with ImagesComponent {
-    val service = new ArticleService
+    val ArticleService = new ArticleService
     val ImageService = new ImageService
 
+    val service = ArticleService
+    
     def makeTestArticles(implicit session: Session) = { 
       val i1 = ImageService.findById(ImageService.add(Image("http://myhost.ex/images/tesa123.jpg", DateTime.now - 3.months))).get
       val i2 = ImageService.findById(ImageService.add(Image("file:///tmp/TT.PNG", DateTime.now - 7.weeks))).get

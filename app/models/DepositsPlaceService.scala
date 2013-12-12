@@ -5,6 +5,8 @@ import models.dao.DepositsPlaceRecord
 case class DepositsPlace(title: String, description: String)
 
 trait DepositsPlacesComponent {
+  val DepositsPlaceService: DepositsPlaceService
+  
   class DepositsPlaceService extends BasicServiceOps[DepositsPlace] {
     object daoMapping {
       import scala.language.implicitConversions

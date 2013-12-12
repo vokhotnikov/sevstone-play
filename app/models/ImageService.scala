@@ -6,6 +6,8 @@ import models.dao.ImageRecord
 case class Image(url: String, addedAt: DateTime)
 
 trait ImagesComponent {
+  val ImageService: ImageService
+  
   class ImageService extends BasicServiceOps[Image] {
     object daoMapping {
       import scala.language.implicitConversions

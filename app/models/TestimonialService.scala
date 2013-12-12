@@ -7,6 +7,8 @@ import models.dao.TestimonialRecord
 case class Testimonial(authorName: String, authorEmail: Option[String], text: String, addedAt: DateTime, isApproved: Boolean)
 
 trait TestimonialsComponent {
+  val TestimonialService: TestimonialService
+  
   class TestimonialService extends BasicServiceOps[Testimonial] {
     object daoMapping {
       import scala.language.implicitConversions

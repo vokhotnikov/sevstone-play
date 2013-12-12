@@ -7,7 +7,7 @@ import models.dao.ArticleRecord
 case class Article(title: String, summary: String, text: String, image: MaybeLoaded[Image], addedAt: DateTime)
 
 trait ArticlesComponent { this: ImagesComponent => 
-  val ImageService: ImageService
+  val ArticleService: ArticleService
   
   class ArticleService extends BasicServiceOps[Article] {
     object daoMapping {

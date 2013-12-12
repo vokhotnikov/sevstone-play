@@ -20,20 +20,27 @@ class SpecimenServiceSpec extends Specification {
         service.randomSpecimen should beNone
         
         val i1 = service add s1
-        (1 to 10).map(_ => service.randomSpecimen) must contain(beSome(Loaded(i1, s1))).foreach
+        (1 to 10).map(_ => service.randomSpecimen).map(_.map(_.map(_.specimen))) must_== (1 to 10).map(_ => Some(Loaded(i1, s1)))
         
         val i2 = service add s2
-        (1 to 50).map(_ => service.randomSpecimen).toSet must_== Set(Some(Loaded(i1, s1)), Some(Loaded(i2, s2)))
+        (1 to 50).map(_ => service.randomSpecimen).map(_.map(_.map(_.specimen))).toSet must_== Set(Some(Loaded(i1, s1)), Some(Loaded(i2, s2)))
       }
     }
   }
 
-  trait TestData extends SpecimensComponent with CategoriesComponent with ExpositionsComponent with DepositsPlacesComponent {
-    val service = new SpecimenService
+  trait TestData extends SpecimensComponent 
+  with CategoriesComponent 
+  with ExpositionsComponent 
+  with DepositsPlacesComponent 
+  with ImagesComponent {
+    val SpecimenService = new SpecimenService
     val CategoryService = new CategoryService
     val ExpositionService = new ExpositionService
     val DepositsPlaceService = new DepositsPlaceService
-
+    val ImageService = new ImageService
+    
+    val service = SpecimenService
+    
     def makeTestSpecimens(implicit session: Session) = {
       val c1 = CategoryService.findById(CategoryService.add(Category(None, "test parent cat", false, 10))).get
       val c2 = CategoryService.findById(CategoryService.add(Category(Some(c1), "test child cat", false, 2))).get

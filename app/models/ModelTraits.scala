@@ -7,7 +7,9 @@ abstract sealed trait MaybeLoaded[+A] {
 }
 
 case class NotLoaded[+A](val value: A) extends MaybeLoaded[A]
-case class Loaded[+A](val id: Long, val value: A) extends MaybeLoaded[A]
+case class Loaded[+A](val id: Long, val value: A) extends MaybeLoaded[A] {
+  def map[U](f: A => U): Loaded[U] = Loaded(id, f(value))
+}
 
 trait BasicServiceOps[A] {
   def findById(id: Long)(implicit session: Session): Option[Loaded[A]]
