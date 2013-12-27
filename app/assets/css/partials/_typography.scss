@@ -1,0 +1,19 @@
+$base-font-family: Georgia, "Times New Roman", serif;
+$base-font-size: 16px;
+
+$blueprint-font-family: $base-font-family;
+$blueprint-font-size: $base-font-size;
+
+@import "compass/typography";
+@include blueprint-typography;
+
+.page-content {
+  padding-top: 1em;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 0.75em;
+  color: $base-color;
+  line-height: 1.5em;
+}

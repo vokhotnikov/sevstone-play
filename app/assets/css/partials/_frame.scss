@@ -1,0 +1,82 @@
+$header-footer-color: #ddd;
+
+body {
+  background: $base-color-back image-url('top-bg.jpg') center top no-repeat;
+}
+
+nav ul {
+  @include horizontal-list;
+}
+
+.wrapper, .header-wrapper {
+  min-width: 960px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.header-wrapper {
+  height: 205px;
+  background: image-url('index-big3.jpg') center top no-repeat;
+  color: $header-footer-color;
+
+  a {
+    @include link-colors($header-footer-color, $base-color);
+  }
+
+  .header-top {
+    @include background-rgba(0, 0, 0, 0.7);
+  }
+}
+
+.footer-wrapper {
+  height: 220px;
+  background: image-url('footer-bg.jpg') center bottom no-repeat;
+  color: $header-footer-color;
+}
+
+header {
+  $fixed-height: 7 * $base-font-size;
+  $bottom-space: 1.2 * $base-font-size;
+  
+  .nav-container {
+    @include column(ceil(2 * $blueprint-grid-columns/3), true);
+    height: $fixed-height; 
+    
+    &>div {
+      float: right;
+      margin: 24px 0px;
+    }
+    
+    &>nav {
+      float: right;
+    }
+  }
+
+  .logo {
+    @include column(floor($blueprint-grid-columns/3));
+    margin-top: $fixed-height - image-height('logo.png') - $bottom-space;
+  }
+}
+
+footer {
+  padding-top: 100px;
+  @include better-helvetica;
+  font-size: 12px;
+  
+  .logo {
+    @include column(floor($blueprint-grid-columns/2));
+  }
+
+  .disclaimers {
+    @include column(ceil($blueprint-grid-columns/2), true);
+    
+    p {
+      margin: 0.5em;
+      
+      &.copyright {
+        font-weight: bold;
+      }
+    }
+  }
+}

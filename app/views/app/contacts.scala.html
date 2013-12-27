@@ -1,0 +1,49 @@
+@()
+
+@import views.html.layout._
+
+@main("Контакты") {
+  <div class="contacts content-with-sidebar">
+  <h1>Контактная информация</h1>
+    <address>
+    <h3>E-mail:</h3>
+    <p>
+      <a href="mailto:vladis.r-o@@mail.ru">vladis.r-o@@mail.ru</a></p>
+      <h3>Адрес Севастопольского Музея камня:</h3>
+      <p>
+      Украина, Севастополь<br>
+      ул. Вакуленчука, 33В
+      </p>
+    </address>
+
+    <p>
+      На данный момент здание Музея камня в Севастополе находится в процессе постройки.
+      Следить за ходом строительства вы можете <a href="@routes.ApplicationController.todo" title="Процесс строительства Музея камня в Севастополе">здесь</a>.
+      Вы также можете ознакомиться с <a href="@routes.ApplicationController.todo" title="Коллекция Музея камня">коллекцией минералов</a> Севастопольского Музея камня.
+    </p>
+    <p>
+      По окончании строительства будем рады видеть вас посетителями нашего музея. И об этом радостном событии мы обязательно сообщим.
+    </p>
+    
+    @* TODO: insert map *@
+  </div>
+
+  <div class="sidebar">
+    <h2>Пишите нам</h2>
+    <form class="feedback-form bp" action="@routes.ApplicationController.todo" method="POST">
+      <label for="name">Ваше имя</label>
+      <input type="text" id="name" name="name">
+      <label for="phone">Контактный телефон</label>
+      <input type="text" id="phone" name="phone">
+      <label for="email">Электронный адрес</label>
+      <input type="email" id="email" name="email">
+      <label for="content">Задайте свой вопрос</label>
+      <textarea id="content" name="content"></textarea>
+      
+      @* TODO: add captcha *@
+  
+      <input type="submit" value="Отправить сообщение">
+      
+    </form>
+  </div>
+}

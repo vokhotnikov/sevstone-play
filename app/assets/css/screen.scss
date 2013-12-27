@@ -1,0 +1,76 @@
+// This import applies a global reset to any page that imports this stylesheet.
+@import "blueprint/reset";
+
+// To configure blueprint, edit the partials/base.sass file.
+@import "partials/base";
+
+// Import all the default blueprint modules so that we can access their mixins.
+@import "blueprint";
+@import "blueprint/scaffolding";
+
+@import "compass/css3";
+
+$legacy-support-for-ie: true;
+$default-border-radius: 4px;
+
+$base-color: #00629C;
+$base-color-back: #051029;
+
+$base-color-border: lighten(desaturate($base-color, 30%), 50%);
+
+$base-font-family: Georgia, "Times New Roman", serif;
+$base-font-size: 16px;
+
+$blueprint-font-family: $base-font-family;
+$blueprint-font-size: $base-font-size;
+
+@include blueprint-utilities;
+@include blueprint-debug;
+@include blueprint-interaction;
+// Remove the scaffolding when you're ready to start doing visual design.
+// Or leave it in if you're happy with how blueprint looks out-of-the-box
+@include blueprint-scaffolding;
+
+@import "partials/mixins";
+@import "partials/typography";
+@import "partials/frame";
+@import "partials/form";
+
+/*
+form {
+  @include blueprint-form;
+  @include blueprint-form-sizes(280px, 280px, $base-font-size * 12);
+  @include border-radius;
+  
+  border: 1px solid $base-color-border;
+  padding: $base-font-size;
+  
+  input, textarea {
+    @include border-radius;
+  }
+}
+*/
+ 
+.container {
+  @include container;
+  //@include showgrid;
+}
+
+.page-content {
+  min-height: 400px;
+}
+
+.content-full {
+  @include column($blueprint-grid-columns);
+}
+
+.content-with-sidebar {
+  @include column(ceil(2 * $blueprint-grid-columns / 3) - 1);
+  @include append(1)
+}
+
+.sidebar {
+  @include column(floor($blueprint-grid-columns / 3), true);
+}
+
+

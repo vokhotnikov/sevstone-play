@@ -18,6 +18,14 @@ trait ApplicationController extends Controller { this: ModelServicesComponent =>
 
     Ok(views.html.app.home(model))
   }
+  
+  def contacts = DBAction { implicit rs => 
+    Ok(views.html.app.contacts())
+  }
+  
+  def todo = Action {
+    NotFound("TODO: not implemented")
+  }
 }
 
 object ApplicationController extends ApplicationController with ModelServicesComponent

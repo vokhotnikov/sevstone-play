@@ -1,0 +1,16 @@
+// Only apply the blueprint form styles to forms with
+// a class of "bp". This makes it easier to style
+// forms from scratch if you need to.
+
+form.bp {
+  @include blueprint-form;
+  @include blueprint-form-sizes(280px, 280px, $base-font-size * 12);
+  @include border-radius;
+
+  border: 1px solid $base-color-border;
+  padding: 10px;
+
+  input, textarea {
+    @include border-radius;
+  }
+}

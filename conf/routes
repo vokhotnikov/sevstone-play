@@ -4,6 +4,9 @@
 
 # Home page
 GET     /                           controllers.ApplicationController.home
+GET     /contacts                   controllers.ApplicationController.contacts
+
+GET     /todo                       controllers.ApplicationController.todo
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
