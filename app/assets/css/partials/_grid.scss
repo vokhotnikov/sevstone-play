@@ -1,0 +1,18 @@
+.container {
+  @include container;
+  //@include showgrid;
+}
+
+.content-full {
+  @include column($blueprint-grid-columns);
+}
+
+.content-with-sidebar {
+  @include column(ceil(2 * $blueprint-grid-columns / 3) - 1);
+  @include append(1)
+}
+
+.sidebar {
+  @include column(floor($blueprint-grid-columns / 3), true);
+}
+

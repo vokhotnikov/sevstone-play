@@ -18,12 +18,6 @@ $base-color-back: #051029;
 
 $base-color-border: lighten(desaturate($base-color, 30%), 50%);
 
-$base-font-family: Georgia, "Times New Roman", serif;
-$base-font-size: 16px;
-
-$blueprint-font-family: $base-font-family;
-$blueprint-font-size: $base-font-size;
-
 @include blueprint-utilities;
 @include blueprint-debug;
 @include blueprint-interaction;
@@ -35,42 +29,4 @@ $blueprint-font-size: $base-font-size;
 @import "partials/typography";
 @import "partials/frame";
 @import "partials/form";
-
-/*
-form {
-  @include blueprint-form;
-  @include blueprint-form-sizes(280px, 280px, $base-font-size * 12);
-  @include border-radius;
-  
-  border: 1px solid $base-color-border;
-  padding: $base-font-size;
-  
-  input, textarea {
-    @include border-radius;
-  }
-}
-*/
- 
-.container {
-  @include container;
-  //@include showgrid;
-}
-
-.page-content {
-  min-height: 400px;
-}
-
-.content-full {
-  @include column($blueprint-grid-columns);
-}
-
-.content-with-sidebar {
-  @include column(ceil(2 * $blueprint-grid-columns / 3) - 1);
-  @include append(1)
-}
-
-.sidebar {
-  @include column(floor($blueprint-grid-columns / 3), true);
-}
-
-
+@import "partials/grid";
