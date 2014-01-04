@@ -26,6 +26,10 @@ trait TestimonialsComponent {
       Query(daoService.Testimonials).filter(_.isApproved).sortBy(_.addedAt.desc).take(limit).list.map(mapToLoaded)
     }
     
+    def allTestimonials(implicit session: Session): List[Loaded[Testimonial]] = {
+      Query(daoService.Testimonials).filter(_.isApproved).sortBy(_.addedAt.desc).list.map(mapToLoaded)
+    }
+    
     private val byId = daoService.Testimonials.createFinderBy(_.id)
     
     def findById(id: Long)(implicit session: Session) = byId(id).firstOption.map(mapToLoaded)

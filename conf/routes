@@ -5,6 +5,7 @@
 # Home page
 GET     /                           controllers.ApplicationController.home
 GET     /contacts                   controllers.ApplicationController.contacts
+GET     /testimonials               controllers.ApplicationController.testimonials
 
 GET     /todo                       controllers.ApplicationController.todo
 

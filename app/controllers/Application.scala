@@ -23,6 +23,10 @@ trait ApplicationController extends Controller { this: ModelServicesComponent =>
     Ok(views.html.app.contacts())
   }
   
+  def testimonials = DBAction { implicit rs =>
+    Ok(views.html.app.testimonials(Services.TestimonialService.allTestimonials))
+  }
+  
   def todo = Action {
     NotFound("TODO: not implemented")
   }

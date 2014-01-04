@@ -1,0 +1,19 @@
+@(testimonials: List[Loaded[Testimonial]])
+
+@import views.html.layout._
+
+@main("Отзывы", Some("page-testimonials")) {
+  <h1>Отзывы</h1>
+  <ul class="plain">
+  @for(t <- testimonials.map(_.value)) {
+    <li>
+      <p class="quotes">&quot;</p>
+      <div>
+        <div class="content">@Html(t.text)</div>
+        <p class="author">@t.authorName</p>
+      </div>
+      <p class="quotes closing">&quot;</p>
+    </li>
+  }
+  </ul>
+}

@@ -6,6 +6,10 @@
 $col-one-third: floor($blueprint-grid-columns / 3);
 $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
 
+@mixin fullwidth {
+  @include column($blueprint-grid-columns, true);
+}
+
 #page-contacts {
   .contacts {
     @include column($col-two-thirds - 1);
@@ -15,4 +19,26 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
   .sidebar {
     @include column($col-one-third, true);
   }
+}
+
+#page-testimonials {
+  li {
+    @include fullwidth;
+    padding-bottom: 0;
+    
+    .content {
+      @include column($blueprint-grid-columns - 1, true);
+    }
+    
+    .author {
+      @include prepend(1);
+      @include column($blueprint-grid-columns - 1, true);
+      margin-bottom: 0;
+    }
+    
+    .quotes.closing {
+      @include push($blueprint-grid-columns - 1);
+      margin-bottom: 0.09em;
+    }
+  } 
 }
