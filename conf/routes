@@ -6,8 +6,12 @@
 GET     /                           controllers.ApplicationController.home
 GET     /contacts                   controllers.ApplicationController.contacts
 GET     /testimonials               controllers.ApplicationController.testimonials
+GET     /articles                   controllers.ArticlesController.list
+GET     /article/:articleId         controllers.ArticlesController.show(articleId: Long)
 
 GET     /todo                       controllers.ApplicationController.todo
+
+GET     /userfiles/*path            controllers.UserFilesController.file(path)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -1,0 +1,24 @@
+@(articles: List[Loaded[Article]])
+
+@import views.html.layout._
+
+@main("Статьи", Some("page-articles")) {
+  <h1>Статьи</h1>
+  @if(articles.isEmpty) {
+    <p>Пока на сайте нет статей.<p>
+  } else {
+    <ul class="plain">
+      @for(la <- articles) {
+        <li>
+          <a href="@routes.ArticlesController.show(la.id)" title="@la.value.title" class="photo">
+            <img src="@routes.UserFilesController.file(la.value.image.value.url)">
+          </a>
+          <div class="text">
+            <h3><a href="@routes.ArticlesController.show(la.id)">@la.value.title</a></h3>
+            <a class="summary" href="@routes.ArticlesController.show(la.id)">@Html(la.value.summary)</a>
+          </div>
+        </li>
+      } 
+    </ul>
+  }
+}

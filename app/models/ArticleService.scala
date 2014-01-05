@@ -32,5 +32,10 @@ trait ArticlesComponent { this: ImagesComponent =>
     
     def latestArticles(limit: Int)(implicit session: Session) = 
       Query(daoService.Articles).sortBy(_.addedAt.desc).take(limit).list.map(mapToLoaded)
+
+    def allArticles(implicit session: Session): List[Loaded[Article]] = {
+      Query(daoService.Articles).sortBy(_.addedAt.desc).list.map(mapToLoaded)
+    }
+    
   }
 }
