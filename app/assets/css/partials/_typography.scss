@@ -23,6 +23,22 @@ ul.plain {
   padding: 0;
 }
 
+body {
+  color: $text-color;
+}
+
+h3 a {
+  color: $base-color;
+  text-decoration: none;
+}
+
+a.summary {
+  display: block;
+  text-decoration: none;
+  color: $text-color;
+}
+
+
 .quotes {
   @include column(1);
   font-size: 64px;

@@ -23,8 +23,10 @@ trait UserFilesController extends Controller {
     val filePath = s"/Users/hunter/work/sevstone-old-files/$path";
     val file = new java.io.File(filesRoot, path)
     if (! file.isFile() || file.isHidden()) {
+      println(s"Requested file not found: ${file.getAbsolutePath}")
       NotFound
     } else if (! file.canRead()) {
+      println(s"Requested file is forbidden: ${file.getAbsolutePath}")
       Forbidden
     } else {
       Ok.sendFile(file)

@@ -12,7 +12,9 @@ trait ArticlesController extends Controller { this: ModelServicesComponent =>
   }
   
   def show(articleId: Long) = DBAction { implicit request =>
-    Ok("todo")
+    Services.ArticleService.findById(articleId).map {a => 
+      Ok(views.html.articles.show(a))
+    }.getOrElse(NotFound)
   }
 }
 

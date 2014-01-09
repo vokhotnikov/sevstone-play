@@ -1,0 +1,9 @@
+@(article: MaybeLoaded[Article])
+
+@import views.html.layout._
+
+@main(article.value.title, Some("page-article")) {
+  <div class="body">
+    @Html(article.value.text)
+  </div>
+}

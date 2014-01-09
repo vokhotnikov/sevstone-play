@@ -42,3 +42,31 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
     }
   } 
 }
+
+#page-articles {
+  li {
+    @include fullwidth;
+    padding-top: 1em;
+  
+    .photo {
+      @include column(6);
+      
+      img {
+        width: span(6);
+        height: auto;
+        @include photo-frame;
+      }
+    }
+    
+    .text {
+      @include column($blueprint-grid-columns - 7, true);
+      @include prepend(1);
+    }
+  }
+}
+
+#page-article {
+  img {
+    @include photo-frame;
+  }
+}

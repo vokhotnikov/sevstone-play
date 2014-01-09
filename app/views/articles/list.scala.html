@@ -11,7 +11,7 @@
       @for(la <- articles) {
         <li>
           <a href="@routes.ArticlesController.show(la.id)" title="@la.value.title" class="photo">
-            <img src="@routes.UserFilesController.file(la.value.image.value.url)">
+            <img src="@la.value.image.value.url">
           </a>
           <div class="text">
             <h3><a href="@routes.ArticlesController.show(la.id)">@la.value.title</a></h3>
