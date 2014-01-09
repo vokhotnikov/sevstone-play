@@ -28,7 +28,7 @@ trait ApplicationController extends Controller { this: ModelServicesComponent =>
   }
   
   def todo = Action {
-    NotFound("TODO: not implemented")
+    NotFound(views.html.app.todo())
   }
 }
 
