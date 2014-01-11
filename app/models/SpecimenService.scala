@@ -70,5 +70,37 @@ trait SpecimensComponent { this: CategoriesComponent with ExpositionsComponent w
         q.drop(rnd).take(1).firstOption.map(mapWithImages)
       }
     }
+    
+    def search(query: String)(implicit session: Session): List[Loaded[SpecimenWithImages]] = {
+      import scala.slick.jdbc.{GetResult, StaticQuery => Q}
+      import Q.interpolation
+      
+      // todo: use normal search backend like elastic
+      val likeVal = s"%$query%"
+      val foundIds = sql"SELECT id FROM specimens WHERE name ILIKE $likeVal OR name_latin ILIKE $likeVal OR label ILIKE $likeVal OR short_description ILIKE $likeVal".as[Long].list;
+
+      val q = (for {
+        s <- daoService.Specimens
+        if s.showOnSite
+        if s.id inSetBind foundIds
+      } yield s).take(100)
+      
+      val specimens = q.list.map(mapToLoaded)
+      val loadedIds = specimens.map(_.id).toSet
+
+      val photos = (for {
+        p <- daoService.SpecimenPhotos
+        if p.specimenId inSetBind loadedIds
+        i <- daoService.Images
+        if p.imageId === i.id
+      } yield (p, i)).list.groupBy(t => t._1.specimenId)
+
+      specimens.map { s => 
+        val specimenPhotos = photos.get(s.id).map(_.partition(_._1.isMain)).getOrElse((List(), List()))
+        val mainImage = specimenPhotos._1.headOption.map(t => imageDaoMapping.mapToLoaded(t._2).value)
+        val additionalImages = specimenPhotos._2.map(t => imageDaoMapping.mapToLoaded(t._2).value)
+        Loaded[SpecimenWithImages](s.id, SpecimenWithImages(s.value, mainImage, additionalImages))
+      }
+    }
   }
 }
