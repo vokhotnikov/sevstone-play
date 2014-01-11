@@ -10,11 +10,11 @@
     <ul class="plain">
       @for(t <- testimonials) {
         <li>
-          <a href="@{routes.ApplicationController.testimonials}#t@t.id">
+          <div class="divlink" data-href="@{routes.ApplicationController.testimonials}#t@t.id">
             <p class="quotes">&quot;</p>
-            <div class="content">@Html(t.value.text)</div>
+            <div class="content shorthtml">@Html(t.value.text)</div>
             <p class="quotes closing">&quot;</p>
-          </a>
+          </div>
         </li>
       }
     </ul>

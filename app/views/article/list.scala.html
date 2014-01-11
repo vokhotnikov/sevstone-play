@@ -15,7 +15,7 @@
           </a>
           <div class="text">
             <h3><a href="@routes.ArticlesController.show(la.id)">@la.value.title</a></h3>
-            <a class="summary" href="@routes.ArticlesController.show(la.id)">@Html(la.value.summary)</a>
+            <div class="summary divlink shorthtml" data-href="@routes.ArticlesController.show(la.id)">@Html(la.value.summary)</div>
           </div>
         </li>
       } 

@@ -42,6 +42,15 @@ img.photo, .photo img {
   @include photo-frame;
 }
 
+.divlink {
+  cursor: pointer;
+  
+  &:hover {
+    color: $base-color;
+    text-decoration: underline;
+  }
+}
+
 .quotes {
   @include column(1);
   font-size: 64px;
@@ -148,24 +157,78 @@ td.caption {
   }
 }
 
-.epigraph {
-  max-width: span(6);
-  margin-left: auto;
-  
-  p {
-    margin-bottom: 0.5em;
-  }
-  
-  .author {
-    margin-left: span(2);
-  }
-}
-
 .english-version {
   @include leader(2);
   font-style: italic;
 }
 
+.epigraph {
+  text-align: right;
+  
+  p {
+    margin-bottom: 0.5em;
+  }
+}
+
+.shorthtml {
+  p, div {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.random-stone {
+  display: block;
+  float: right;
+  width: span(8);
+  height: image-height('random-stone.png');
+  overflow: hidden;
+  position: relative;
+  @include link-colors(#000);
+  
+  img {
+    width: span(6);
+    height: auto;
+    margin-left: span(1) + $blueprint-grid-margin;
+    margin-top: 24px;
+  }
+  
+  .ramp {
+    position: absolute;
+    height: image-height('random-stone.png');
+    width: image-height('random-stone.png');
+    background: image-url('random-stone.png') top left no-repeat;
+    z-index: 10;
+  }
+  
+  .etiket {
+    text-align: center;
+    width: span(5);
+    margin-left: (image-width('random-stone.png') - span(5))/2;
+    margin-top: 215px;
+  
+    .name {
+      font-size: 14px;
+      text-decoration: underline;
+      color: #000;
+      margin-bottom: 4px;
+    }
+    
+    .description {
+      color: #5c5c5c;
+      font-size: 13px;
+      line-height: 14px;
+    }
+    
+    .place {
+      margin-top: 4px;
+      font-size: 12px;
+      line-height: 14px;
+      color: 000;
+      font-style: italic;
+    }
+  }
+}
 #page-testimonials {
     .author {
       font-weight: bold;

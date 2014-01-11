@@ -3,10 +3,30 @@
 @import views.html.layout._
 
 @main(""){
+  <div>
+  @if(!model.randomSpecimen.isEmpty) {
+    @defining(model.randomSpecimen.get) { stone =>
+      <a class="random-stone" href="@routes.SpecimenController.show(stone.id)">
+        <div class="ramp">
+          <div class="etiket">
+            @defining(stone.value.specimen) { s =>
+              <p class="name">@s.name</p>
+              <div class="description shorthtml">@Html(s.shortDescription)</div>
+              <p class="place">@s.depositsPlace.value.title</p>
+            }
+          </div>
+        </div>
+        <img src="@stone.value.mainImage.get.url">
+      </a>
+    }
+  }
+
   <h1>Добро пожаловать в музей камня в Севастополе!</h1>
   
   @home_article()
   
+  </div>
+
   @* articles *@
   @top_articles(model.latestArticles)
 
