@@ -148,6 +148,24 @@ td.caption {
   }
 }
 
+.epigraph {
+  max-width: span(6);
+  margin-left: auto;
+  
+  p {
+    margin-bottom: 0.5em;
+  }
+  
+  .author {
+    margin-left: span(2);
+  }
+}
+
+.english-version {
+  @include leader(2);
+  font-style: italic;
+}
+
 #page-testimonials {
     .author {
       font-weight: bold;
