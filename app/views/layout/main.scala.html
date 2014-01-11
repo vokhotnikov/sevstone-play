@@ -8,9 +8,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         @* TODO: extract site title into val *@
-        <title>@{List(title, "Севастопольский музей камня").filter(_.trim.nonEmpty).mkString(". ")}</title>
+        <title>@{List(title, "Севастопольский музей камня").map(_.trim).filter(_.nonEmpty).mkString(". ")}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="@routes.Assets.at("css/lightbox.css")">
 
         <link rel="stylesheet" href="@routes.Assets.at("css/screen.css")">
         <link rel="stylesheet" href="@routes.Assets.at("css/print.css")">
@@ -79,6 +81,7 @@
     
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="@routes.Assets.at("js/vendor/jquery-1.10.2.min.js")"><\/script>')</script>
+        <script src="@routes.Assets.at("js/vendor/lightbox-2.6.min.js")"></script>
         <script src="@routes.Assets.at("js/main.js")"></script>
         <script>
           var _gaq = [

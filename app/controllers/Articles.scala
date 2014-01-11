@@ -8,12 +8,12 @@ import play.api.Play.current
 
 trait ArticlesController extends Controller { this: ModelServicesComponent =>
   def list() = DBAction { implicit request =>
-    Ok(views.html.articles.list(Services.ArticleService.allArticles))
+    Ok(views.html.article.list(Services.ArticleService.allArticles))
   }
   
   def show(articleId: Long) = DBAction { implicit request =>
     Services.ArticleService.findById(articleId).map {a => 
-      Ok(views.html.articles.show(a))
+      Ok(views.html.article.show(a))
     }.getOrElse(NotFound)
   }
 }

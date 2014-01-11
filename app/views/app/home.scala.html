@@ -5,17 +5,8 @@
 @main(""){
   
   @* articles *@
-  @if(!model.latestArticles.isEmpty) {
-	  <hr>
-	  <h2>Интересные статьи</h2>
-	  <ul>
-		  @for(a <- model.latestArticles) {
-		    <li>@Html(a.value.summary)</li>
-		  }
-	  </ul>
-	  <a href="#">все отзывы</a>
-  }
-  
+  @top_articles(model.latestArticles)
+
   @* testimonilals *@
   @if(!model.latestTestimonials.isEmpty) {
 	  <hr>

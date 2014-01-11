@@ -1,0 +1,38 @@
+@(model: MaybeLoaded[SpecimenWithImages], latestArticles: List[Loaded[Article]])
+
+@import views.html.layout._
+@import helpers._
+
+@main(model.value.specimen.name, Some("page-specimen")) {
+  <div class="content">
+    <a href="/@model.value.mainImage.get.url" title="@model.value.specimen.name" data-lightbox="main-photo">
+      <img class="photo" src="/@model.value.mainImage.get.url" alt="@model.value.specimen.name">
+    </a>
+
+    <div class="properties">
+      <table class="striped">
+        <tr>
+          <td class="caption">Название</td><td class="value"><h3>@model.value.specimen.name</h3><p>@model.value.specimen.nameLatin.getOrElse("")</p></td>
+        </tr>
+        <tr>
+          <td class="caption">Хим. формула</td><td class="value">@formula(model.value.specimen.formula.getOrElse("-"))</td>
+        </tr>
+        <tr>
+          <td class="caption">Размер (см)</td><td class="value">@model.value.specimen.size.getOrElse("-")</td>
+        </tr>
+        <tr>
+          <td class="caption">Месторождение</td><td class="value"><a href="@routes.ApplicationController.todo">@model.value.specimen.depositsPlace.value.title</a></td>
+        </tr>
+        <tr>
+          <td class="caption">Экспозиция</td><td class="value"><a href="@routes.ApplicationController.todo">@model.value.specimen.exposition.value.title<a></a></td>
+        </tr>
+        <tr>
+          <td class="caption">Описание</td><td class="value">@Html(model.value.specimen.shortDescription)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="description content">@Html(model.value.specimen.description)</div>
+  
+  @top_articles(latestArticles)
+}

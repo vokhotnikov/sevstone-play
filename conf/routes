@@ -6,8 +6,11 @@
 GET     /                           controllers.ApplicationController.home
 GET     /contacts                   controllers.ApplicationController.contacts
 GET     /testimonials               controllers.ApplicationController.testimonials
+
 GET     /articles                   controllers.ArticlesController.list
 GET     /article/:articleId         controllers.ArticlesController.show(articleId: Long)
+
+GET     /specimen/:specimenId       controllers.SpecimenController.show(specimenId: Long)
 
 GET     /todo                       controllers.ApplicationController.todo
 

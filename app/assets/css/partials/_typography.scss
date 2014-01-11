@@ -38,6 +38,9 @@ a.summary {
   color: $text-color;
 }
 
+img.photo, .photo img {
+  @include photo-frame;
+}
 
 .quotes {
   @include column(1);
@@ -47,6 +50,80 @@ a.summary {
   margin-bottom: 0.09em;
   padding-top: 0.3em;
   @include replace-text("testimonials-quotes.png", 0, 0.05em);
+}
+
+table {
+  tr.even td {
+    background-color: #f2f2f2;
+  }
+  tr.odd td {
+    background-color: #ffffff;
+  }
+}
+
+table.striped {
+  tr:nth-child(even) td {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(odd) td {
+    background-color: #ffffff;
+  }
+}
+
+td.caption {
+  color: #727272;
+}
+
+.properties {
+  td.value {
+    @include better-helvetica;
+    font-size: 14px;
+    
+    h3 {
+      margin: 0;
+      color: $base-color;
+    }
+    
+    p {
+      margin: 0;
+    }
+  }
+}
+    
+.top-articles {
+  border-top: 1px solid #d7d7d7;
+  padding-top: 1em;
+  
+  h2 {
+    color: #3a3939;
+    font-size: 30px;
+    line-height: 32px;
+    padding: 0;
+    margin: 0 0 1em 0;
+    text-transform: uppercase;
+
+   .header-word-1 {
+      display: block;
+      color: $base-color;
+      font-size: 16px;
+      line-height: 18px;
+      padding: 0;
+      margin: 0;
+    }
+  }
+  
+  h3 {
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .summary {
+    font-size: 12px;
+    height: 55px;
+    overflow: hidden;
+  }
 }
 
 #page-testimonials {

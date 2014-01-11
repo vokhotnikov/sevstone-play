@@ -1,0 +1,25 @@
+@(articles: List[Loaded[Article]])
+
+@if(!articles.isEmpty) {
+  <div class="top-articles">
+    <div class="header">
+      <h2><span class="header-word-1">Интересные</span> статьи</h2>
+      <a href="@routes.ArticlesController.list">все статьи</a>
+    </div>
+
+    <ul class="plain">
+      @for(la <- articles) {
+        <li>
+          <a href="@routes.ArticlesController.show(la.id)" title="@la.value.title" class="photo">
+            <img src="/@la.value.image.value.url">
+          </a>
+          <div class="text">
+            <h3><a href="@routes.ArticlesController.show(la.id)">@la.value.title</a></h3>
+            <a class="summary" href="@routes.ArticlesController.show(la.id)">@Html(la.value.summary)</a>
+          </div>
+        </li>
+      } 
+    </ul>
+  </div>
+}
+

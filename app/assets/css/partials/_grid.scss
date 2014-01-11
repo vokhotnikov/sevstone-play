@@ -10,6 +10,57 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
   @include column($blueprint-grid-columns, true);
 }
 
+.top-articles {
+  @include fullwidth;
+  
+  .header {
+    @include column(5);
+  }
+
+  ul {
+    @include column($blueprint-grid-columns - 5, true);
+    
+    li {
+      @include column($blueprint-grid-columns - 5, true);
+      padding-bottom: 2em;
+      
+      .photo {
+        @include column(2);
+        
+        img {
+          width: span(2);
+          height: span(2);
+          overflow: hidden;
+          @include border-radius(50%);
+        }
+      }
+      
+      .text {
+        @include column($blueprint-grid-columns - 7, true);
+      }
+    }
+  }
+}
+
+#page-specimen {
+  .top-articles {
+    @include column($blueprint-grid-columns - 4);
+    @include push(2);
+    
+    ul {
+      @include column($blueprint-grid-columns - 9, true);
+      
+      li {
+        @include column($blueprint-grid-columns - 9, true);
+        
+        .text {
+          @include column($blueprint-grid-columns - 11, true);
+        }
+      }
+    }
+  }
+}
+
 #page-contacts {
   .contacts {
     @include column($col-two-thirds - 1);
@@ -68,5 +119,22 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
 #page-article {
   img {
     @include photo-frame;
+  }
+}
+
+#page-specimen {
+  .content {
+    @include column($blueprint-grid-columns - 4);
+    @include prepend(2);
+    
+    img.photo {
+      @include column(6);
+      height: auto;
+    }
+    
+    .properties {
+      @include column($blueprint-grid-columns - 11);
+      @include push(1);
+    }
   }
 }

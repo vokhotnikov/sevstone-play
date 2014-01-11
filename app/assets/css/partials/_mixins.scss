@@ -18,6 +18,4 @@
 @mixin photo-frame{
   @include border-radius;
   border: 1px solid #999;
-  padding: 8px;
-  background-color: #ffffe5;
 }
