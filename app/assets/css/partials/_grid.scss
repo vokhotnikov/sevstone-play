@@ -10,6 +10,34 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
   @include column($blueprint-grid-columns, true);
 }
 
+.top-testimonials {
+  @include fullwidth;
+
+  .header {
+    @include column(5);
+  }
+
+  ul {
+    @include column($blueprint-grid-columns - 5, true);
+    
+    li {
+      @include column($blueprint-grid-columns - 5, true);
+    
+      .content {
+        min-height: 50px;
+        @include column($blueprint-grid-columns - 7, true);
+        @include append(1);
+      }
+      
+      .quotes.closing {
+        @include last;
+        @include push($blueprint-grid-columns - 6);
+        margin-bottom: 0.09em;
+      }
+    }
+  } 
+}
+
 .top-articles {
   @include fullwidth;
   

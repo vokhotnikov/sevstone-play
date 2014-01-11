@@ -5,12 +5,12 @@
 @main("Отзывы", Some("page-testimonials")) {
   <h1>Отзывы</h1>
   <ul class="plain">
-  @for(t <- testimonials.map(_.value)) {
-    <li>
+  @for(t <- testimonials) {
+    <li id="t@t.id">
       <p class="quotes">&quot;</p>
       <div>
-        <div class="content">@Html(t.text)</div>
-        <p class="author">@t.authorName</p>
+        <div class="content">@Html(t.value.text)</div>
+        <p class="author">@t.value.authorName</p>
       </div>
       <p class="quotes closing">&quot;</p>
     </li>

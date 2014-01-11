@@ -1,0 +1,23 @@
+@(testimonials: List[Loaded[Testimonial]])
+
+@if(!testimonials.isEmpty) {
+  <div class="top-testimonials">
+    <div class="header">
+      <h2>Отзывы</h2>
+      <a href="@routes.ApplicationController.testimonials">все отзывы</a>
+    </div>
+
+    <ul class="plain">
+      @for(t <- testimonials) {
+        <li>
+          <a href="@{routes.ApplicationController.testimonials}#t@t.id">
+            <p class="quotes">&quot;</p>
+            <div class="content">@Html(t.value.text)</div>
+            <p class="quotes closing">&quot;</p>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+}
+

@@ -90,10 +90,32 @@ td.caption {
   }
 }
     
-.top-articles {
+.top-testimonials, .top-articles {
   border-top: 1px solid #d7d7d7;
   padding-top: 1em;
+
+  .header a {
+    @include link-colors(#8c8c8c);
+  }
+}
+
+.top-testimonials {
+  h2 {
+    font-size: 30px;
+    color: $base-color;
+    text-transform: uppercase;
+  }
+
+  a {
+    @include link-colors($text-color, $base-color);
+  }
   
+  .content {
+    font-size: 14px;
+  }
+}
+
+.top-articles {
   h2 {
     color: #3a3939;
     font-size: 30px;

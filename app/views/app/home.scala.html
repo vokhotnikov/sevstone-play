@@ -3,19 +3,9 @@
 @import views.html.layout._
 
 @main(""){
-  
   @* articles *@
   @top_articles(model.latestArticles)
 
   @* testimonilals *@
-  @if(!model.latestTestimonials.isEmpty) {
-	  <hr>
-	  <h2>Отзывы</h2>
-	  <ul>
-		  @for(t <- model.latestTestimonials) {
-		    <li>@Html(t.value.text)</li>
-		  }
-	  </ul>
-	  <a href="#">все отзывы</a>
-  }
+  @top_testimonials(model.latestTestimonials)
 }
