@@ -36,11 +36,19 @@ trait CollectionController extends Controller { this: ModelServicesComponent =>
         val categories = filters.categoryId.flatMap(Services.CategoryService.findSubtree(_))
         val depositsPlace = filters.depositsPlaceId.flatMap(Services.DepositsPlaceService.findById(_))
         val expos = filters.expositionId.flatMap(Services.ExpositionService.findSubtree(_))
+
+        val title = List(
+          categories.map(_.node.value.title),
+          depositsPlace.map(_.value.title),
+          expos.map(_.node.value.title),
+          filters.keyword.map(q => s"Результаты поиска для $q")).flatten.headOption.getOrElse("Коллекция")
+
         val results = Services.SpecimenService.search(filters.keyword, categories, depositsPlace, expos)
+
         val available = CollectionFilterAvailableSets(Services.CategoryService.loadAllTrees,
           Services.DepositsPlaceService.loadAll,
           Services.ExpositionService.loadAllTrees)
-        val title = expos.map(_.node.value.title).getOrElse("Коллекция")
+
         Ok(views.html.collection.results(results, title, filterForm.bindFromRequest(), available))
       })
   }
