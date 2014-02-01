@@ -71,33 +71,48 @@ trait SpecimensComponent { this: CategoriesComponent with ExpositionsComponent w
       }
     }
 
-    def search(query: Option[String], expoTree: Option[Hierarchy[Loaded[Exposition]]])(implicit session: Session): List[Loaded[SpecimenWithImages]] = {
+    def search(query: Option[String],
+      categoryTree: Option[Hierarchy[Loaded[Category]]],
+      depositsPlace: Option[Loaded[DepositsPlace]],
+      expoTree: Option[Hierarchy[Loaded[Exposition]]])(implicit session: Session): List[Loaded[SpecimenWithImages]] = {
       val qBase = Query(daoService.Specimens).filter(_.showOnSite === true);
-      
-      val q1 = query.map { queryString => 
+
+      val q1 = query.map { queryString =>
         // todo: use normal search backend like elastic
         import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
         import Q.interpolation
 
-        println("!! Add search clause")
-        val likeVal = s"%${query.get}%"
+        val likeVal = s"%$queryString%"
         val foundIds = sql"SELECT id FROM specimens WHERE name ILIKE $likeVal OR name_latin ILIKE $likeVal OR label ILIKE $likeVal OR short_description ILIKE $likeVal".as[Long].list;
 
         qBase.filter(_.id inSetBind foundIds)
       }.getOrElse(qBase)
-      
+
       val q2 = expoTree.map { expos =>
-        println("!! Add expo clause")
-        val expoIds = expos.toList.map(_.id)
+        val expoIds = expos.toList.map(_.id).toSet
         for {
-           s <- q1
-           e <- daoService.Expositions
-           if s.expositionId === e.id
-           if e.id inSetBind expoIds
-        } yield(s)
+          s <- q1
+          e <- daoService.Expositions
+          if s.expositionId === e.id
+          if e.id inSetBind expoIds
+        } yield (s)
       }.getOrElse(q1)
+
+      val q3 = categoryTree.map { cats =>
+        val catIds = cats.toList.map(_.id).toSet
+        for {
+          s <- q2
+          c <- daoService.Categories
+          if s.categoryId === c.id
+          if c.id inSetBind catIds
+        } yield (s)
+      }.getOrElse(q2)
+
+      val q4 = depositsPlace.map { dp =>
+        q3.filter(_.depositsPlaceId === dp.id)
+      }.getOrElse(q3)
       
-      val q = q2.take(10)
+      val q = q4.take(1000)
 
       val specimens = q.list.map(mapToLoaded)
       val loadedIds = specimens.map(_.id).toSet

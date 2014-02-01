@@ -10,7 +10,7 @@ trait SearchController extends Controller { this: ModelServicesComponent =>
   def search = DBAction { implicit request =>
     val query = request.queryString.get("query").flatMap(_.headOption)
     query.map { q =>
-      val specimens = Services.SpecimenService.search(Some(q), None).groupBy(_.value.specimen.category)
+      val specimens = Services.SpecimenService.search(Some(q), None, None, None).groupBy(_.value.specimen.category)
       Ok(views.html.search.results(q, specimens))
     }.getOrElse(NotFound)
   }

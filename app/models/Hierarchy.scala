@@ -21,6 +21,11 @@ case class Hierarchy[A](node: A, parent: Option[A], children: List[Hierarchy[A]]
   def toListWithDepth(initialDepth: Int = 0): List[(A, Int)] = {
     (node, initialDepth) :: children.flatMap { _.toListWithDepth(initialDepth + 1) }
   }
+  
+  def actOn(action: A => Unit) {
+    action(node)
+    children.foreach(_.actOn(action))
+  }
 }
 
 object Hierarchy {

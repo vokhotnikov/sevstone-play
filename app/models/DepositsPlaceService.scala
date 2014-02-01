@@ -27,5 +27,7 @@ trait DepositsPlacesComponent {
     def add(testimonial: DepositsPlace)(implicit session: Session): Long = {
       daoService.DepositsPlaces.autoInc insert mapToRecord(testimonial)
     }
+    
+    def loadAll(implicit session: Session) = Query(daoService.DepositsPlaces).list.sortBy(r => (r.title, r.id)).map(mapToLoaded)
   }
 }
