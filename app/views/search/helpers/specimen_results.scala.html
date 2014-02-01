@@ -1,0 +1,26 @@
+@(specimens: List[Loaded[SpecimenWithImages]])
+
+<table class="striped">
+  <tr>
+    <th>Фото</th>
+    <th>Название</th>
+    <th>Размер</th>
+    <th>Месторождение</th>
+    <th>Экспозиция</th>
+    <th>Описание</th>
+  </tr>
+  @for(s <- specimens) {
+    <tr class="divlink" data-href="@routes.SpecimenController.show(s.id)">
+      <td class="photo"><img src="/@s.value.mainImage.get.url"><p>@{s.value.mainImage.size + s.value.additionaryImages.size} фото</p></td>
+      <td class="cell-name">
+        <p class="name">@s.value.specimen.name</p>
+        <p>@s.value.specimen.nameLatin.getOrElse("-")</p>
+        <p>@views.html.specimen.helpers.formula(s.value.specimen.formula.map(f => s"[$f]").getOrElse(""))</p>
+       </td>
+      <td class="cell-size">@s.value.specimen.size.getOrElse("-")</td>
+      <td class="cell-deposits">@s.value.specimen.depositsPlace.value.title</td>
+      <td class="cell-exposition">@s.value.specimen.exposition.value.title</td>
+      <td class="cell-description shorthtml">@Html(s.value.specimen.shortDescription)</td>
+    </tr>
+  }
+</table>

@@ -1,0 +1,24 @@
+@(specimens: List[Loaded[SpecimenWithImages]], title: String, filterForm: Form[CollectionFilters], availableSets: CollectionFilterAvailableSets)
+
+@import views.html.layout._
+
+@main(title) {
+  @helper.form(routes.CollectionController.query()) {
+    @helper.select(filterForm("exposition"),
+      options = helper.options(availableSets.expositions.flatMap(_.toListWithDepth(0)).map {
+        case (l, depth) => l.id.toString -> (("\u00a0" * depth) + l.value.title)
+        }.toMap
+      ),
+       '_label -> "Экспозиция", '_showConstraints -> false, 'class -> "submit-on-change")
+    @helper.inputText(filterForm("keyword"), '_label -> "Точный поиск (введите слово)", 'class -> "submit-on-enter", 'autofocus -> None)
+    <input type="submit" value="Найти">
+  }
+  <h1>@title</h1>
+  @if(specimens.isEmpty) {
+    <p>Не найдено ни одного подходящего образца.</p>
+  } else {
+    <div class="specimen-groups">
+      @views.html.search.helpers.specimen_results(specimens)
+    </div>
+  }
+}

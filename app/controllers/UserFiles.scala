@@ -20,8 +20,9 @@ trait UserFilesController extends Controller {
   }
 
   def file(path: String) = Action {
-    val filePath = s"/Users/hunter/work/sevstone-old-files/$path";
-    val file = new java.io.File(filesRoot, path)
+    val normalizedPath = path.toLowerCase()
+    val filePath = s"/Users/hunter/work/sevstone-old-files/$normalizedPath";
+    val file = new java.io.File(filesRoot, normalizedPath)
     if (! file.isFile() || file.isHidden()) {
       println(s"Requested file not found: ${file.getAbsolutePath}")
       NotFound

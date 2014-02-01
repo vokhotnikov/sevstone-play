@@ -1,0 +1,23 @@
+@(expoTrees: List[Hierarchy[Loaded[Exposition]]])
+
+@import views.html.layout._
+
+@displayLevel(level: List[Hierarchy[Loaded[Exposition]]], levelNo: Int) = {
+    <ul>
+    @for(e <- level) {
+      <li class="level-@levelNo"><a href="@routes.CollectionController.query?exposition=@e.node.id">@e.node.value.title</a></li>
+      @if(e.children.nonEmpty) {
+        @displayLevel(e.children, levelNo + 1)
+      }
+    }
+    </ul>
+}
+
+@main("Экспозиции музея", Some("page-expositions")) {
+  <h1>Список экспозиций нашего музея</h1>
+  @if(expoTrees.isEmpty) {
+    <p>Пока нет ни одной экспозиции.</p>
+  } else {
+    @displayLevel(expoTrees, 1)
+  }
+}

@@ -9,6 +9,9 @@ GET     /testimonials               controllers.ApplicationController.testimonia
 
 GET     /search                     controllers.SearchController.search
 
+GET     /expositions                controllers.CollectionController.expositions
+GET     /collection                 controllers.CollectionController.query
+
 GET     /articles                   controllers.ArticlesController.list
 GET     /article/:articleId         controllers.ArticlesController.show(articleId: Long)
 

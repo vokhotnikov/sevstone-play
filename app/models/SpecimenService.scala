@@ -52,7 +52,7 @@ trait SpecimensComponent { this: CategoriesComponent with ExpositionsComponent w
           p <- daoService.SpecimenPhotos
           i <- daoService.Images if p.imageId === i.id
         } yield (p, i)).filter(_._1.specimenId === r.id).list
-        
+
         val photos = p.partition(_._1.isMain)
 
         SpecimenWithImages(s,
@@ -70,21 +70,35 @@ trait SpecimensComponent { this: CategoriesComponent with ExpositionsComponent w
         q.drop(rnd).take(1).firstOption.map(mapWithImages)
       }
     }
-    
-    def search(query: String)(implicit session: Session): List[Loaded[SpecimenWithImages]] = {
-      import scala.slick.jdbc.{GetResult, StaticQuery => Q}
-      import Q.interpolation
-      
-      // todo: use normal search backend like elastic
-      val likeVal = s"%$query%"
-      val foundIds = sql"SELECT id FROM specimens WHERE name ILIKE $likeVal OR name_latin ILIKE $likeVal OR label ILIKE $likeVal OR short_description ILIKE $likeVal".as[Long].list;
 
-      val q = (for {
-        s <- daoService.Specimens
-        if s.showOnSite
-        if s.id inSetBind foundIds
-      } yield s).take(100)
+    def search(query: Option[String], expoTree: Option[Hierarchy[Loaded[Exposition]]])(implicit session: Session): List[Loaded[SpecimenWithImages]] = {
+      val qBase = Query(daoService.Specimens).filter(_.showOnSite === true);
       
+      val q1 = query.map { queryString => 
+        // todo: use normal search backend like elastic
+        import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
+        import Q.interpolation
+
+        println("!! Add search clause")
+        val likeVal = s"%${query.get}%"
+        val foundIds = sql"SELECT id FROM specimens WHERE name ILIKE $likeVal OR name_latin ILIKE $likeVal OR label ILIKE $likeVal OR short_description ILIKE $likeVal".as[Long].list;
+
+        qBase.filter(_.id inSetBind foundIds)
+      }.getOrElse(qBase)
+      
+      val q2 = expoTree.map { expos =>
+        println("!! Add expo clause")
+        val expoIds = expos.toList.map(_.id)
+        for {
+           s <- q1
+           e <- daoService.Expositions
+           if s.expositionId === e.id
+           if e.id inSetBind expoIds
+        } yield(s)
+      }.getOrElse(q1)
+      
+      val q = q2.take(10)
+
       val specimens = q.list.map(mapToLoaded)
       val loadedIds = specimens.map(_.id).toSet
 
@@ -95,7 +109,7 @@ trait SpecimensComponent { this: CategoriesComponent with ExpositionsComponent w
         if p.imageId === i.id
       } yield (p, i)).list.groupBy(t => t._1.specimenId)
 
-      specimens.map { s => 
+      specimens.map { s =>
         val specimenPhotos = photos.get(s.id).map(_.partition(_._1.isMain)).getOrElse((List(), List()))
         val mainImage = specimenPhotos._1.headOption.map(t => imageDaoMapping.mapToLoaded(t._2).value)
         val additionalImages = specimenPhotos._2.map(t => imageDaoMapping.mapToLoaded(t._2).value)

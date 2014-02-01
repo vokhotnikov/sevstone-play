@@ -5,7 +5,26 @@ import models.dao.ExpositionRecord
 
 case class Exposition(parent: Option[MaybeLoaded[Exposition]], title: String, description: String, sortPriority: Long)
 
+object ExpositionImplicits {
+  implicit object ExpositionHierarchyElementLike extends HierarchyElementLike[Loaded[Exposition]] {
+    def id(from: Loaded[Exposition]) = from.id
+    def parentId(from: Loaded[Exposition]) = from.value.parent.flatMap {
+      case p: Loaded[Exposition] => Some(p.id)
+      case _ => None
+    }
+    def comesBefore(me: Loaded[Exposition], other: Loaded[Exposition]) = {
+      import scala.math.Ordering.Implicits._
+
+      def asTuple(l: Loaded[Exposition]) = (l.value.sortPriority, l.value.title, l.id)
+
+      asTuple(me) < asTuple(other)
+    }
+  }
+}
+
 trait ExpositionsComponent {
+  import ExpositionImplicits._
+  
   val ExpositionService: ExpositionService
 
   class ExpositionService extends BasicServiceOps[Exposition] {
@@ -30,5 +49,14 @@ trait ExpositionsComponent {
     def findById(id: Long)(implicit session: Session) = byId(id).firstOption.map(mapToLoaded)
 
     def add(exposition: Exposition)(implicit session: Session) = daoService.Expositions.autoInc insert exposition
+
+    def loadAllTrees(implicit session: Session) = {
+      val elems = Query(daoService.Expositions).list.map(mapToLoaded) 
+      Hierarchy(elems)
+    }
+    
+    def findSubtree(fromId: Long)(implicit session: Session) = {
+      loadAllTrees.flatMap(h => h.findSubtree(_.id == fromId)).headOption
+    }
   }
 }

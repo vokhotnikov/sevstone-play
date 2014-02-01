@@ -144,12 +144,19 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
   }
 }
 
-#page-article {
+#page-article .body {
+  .link-container {
+    display: inline-block;
+    height: auto !important;
+  }
+  
   img {
     @include photo-frame;
+    width: span(6);
+    height: auto;
   }
 }
-
+  
 #page-specimen {
   .content {
     @include column($blueprint-grid-columns - 4);

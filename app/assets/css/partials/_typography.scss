@@ -229,6 +229,71 @@ td.caption {
     }
   }
 }
+
+.specimen-groups {
+  @include better-helvetica;
+  color: #000;
+  font-size: 12px;
+  
+  h3 {
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: normal;
+    color: $base-color;
+  }
+  
+  p {
+    margin: 0;
+    pattern: 0;
+  }
+  
+  th {
+    font-weight: normal;
+    color: #6e6e6e;
+    font-size: 14px;
+  }
+  
+  td {
+    img {
+      width: span(3);
+      height: auto;
+    }
+  }
+  
+  .name {
+    font-size: 14px;
+    text-decoration: underline;
+    color: $base-color;
+  }
+
+  .photo p {
+    color: #6e6e6e;
+    font-size: 11px;
+    text-align: center;
+    text-decoration: underline;
+  }
+  
+  td.photo {
+    width: span(3);
+  }
+  
+  .cell-name {
+    width: span(4);
+  }
+  
+  .cell-size {
+    width: span(2);
+  }
+  
+  .cell-deposits {
+    width: span(4);
+  }
+  
+  .cell-exposition {
+    width: span(4);
+  }
+}
+
 #page-testimonials {
     .author {
       font-weight: bold;
@@ -237,3 +302,18 @@ td.caption {
     }
 }
 
+#page-expositions {
+  ul {
+    margin: 0;
+  }
+  
+  li {
+    @include no-bullets;
+    
+    &.level-1 {
+      font-size: 24px;
+      line-height: 36px;
+      margin-top: 16px;
+    }
+  }
+}

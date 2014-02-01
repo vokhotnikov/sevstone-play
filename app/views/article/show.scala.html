@@ -1,9 +1,27 @@
 @(article: MaybeLoaded[Article])
 
 @import views.html.layout._
+@import helpers._
 
 @main(article.value.title, Some("page-article")) {
   <div class="body">
-    @Html(article.value.text)
+    @{
+      val rnd = new scala.util.Random()
+      val imgRegex = "(?i)<img(\\s+[^>]*)?>".r
+      val styleAttrRegex = "(?i)\\s*style=\"[^\"]+\"\\s*".r
+      val srcAttrRegex = "(?i)\\s*src=\"([^\"]+)\"\\s*".r
+      
+      val html = imgRegex.replaceAllIn(article.value.text, m => {
+        val attrs = m.group(1).trim()
+        val (linkAttrs, imgAttrs) = styleAttrRegex.findFirstMatchIn(attrs) match {
+          case Some(m) => (m.matched, attrs.replace(m.matched, " "))
+          case None => ("", attrs)
+        }
+        val src = srcAttrRegex.findFirstMatchIn(attrs).map(_.group(1)).getOrElse("#")
+        val lightboxAttr = s"data-lightbox='photo@{rnd.nextLong}'"
+        s"<a class='link-container' href='$src' $lightboxAttr $linkAttrs><img $imgAttrs></a>" 
+      })
+      Html(html)
+    }
   </div>
 }
