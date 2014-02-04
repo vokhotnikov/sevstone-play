@@ -54,12 +54,16 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
       
       .photo {
         @include column(2);
+        height: span(2) - 2px;
+        width: span(2) - 2px;
+        overflow: hidden;
+        @include border-radius(50%);
+        border: 1px solid #ccc;
         
         img {
           width: span(2);
-          height: span(2);
-          overflow: hidden;
-          @include border-radius(50%);
+          height: auto;
+          border: 0;
         }
       }
       
