@@ -294,6 +294,37 @@ td.caption {
   }
 }
 
+.specimen-filters {
+  label {
+    font-size: 14px;
+    color: #666;
+    font-weight: normal;
+  }
+  
+  input, select {
+    font-size: 16px;
+    @include border-radius;
+    /*
+    height: 30px;
+    color: #ffb818;
+    background: #333;
+    border: 1px solid #999;
+    */
+  }
+  
+  input {
+    background-color: white;
+    border: 1px solid #aaa;
+    height: 20px;
+  }
+  
+  input.submit {
+    font-size: 14px;
+    @include better-helvetica;
+    height: 24px;
+  }
+}
+
 #page-testimonials {
     .author {
       font-weight: bold;

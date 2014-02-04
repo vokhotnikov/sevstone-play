@@ -70,6 +70,51 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
   }
 }
 
+.specimen-filters {
+  @include fullwidth;
+
+  .long-field {
+    @include column($col-two-thirds, true);
+    @include append($col-one-third);
+  }
+  
+  .short-field {
+    @include column($col-one-third);
+    
+    &.last {
+      @include last;
+    }
+  }
+  
+  dd {
+    margin: 0;
+    padding: 0;
+  }
+  
+  select {
+    margin: 1px;
+    width: 100%;
+  }
+  
+  #keyword_field {
+    dl, dt {
+      @include column($col-one-third, true);
+    }
+
+    dd {
+      @include column($col-one-third - 2);
+      
+      input {
+        width: 100%;
+      }
+    }
+    
+    input.submit {
+      @include column(2, true);
+    }
+  }  
+}
+
 #page-specimen {
   .top-articles {
     @include column($blueprint-grid-columns - 4);
