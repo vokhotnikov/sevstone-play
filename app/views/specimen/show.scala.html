@@ -14,9 +14,16 @@
         <tr>
           <td class="caption">Название</td><td class="value"><h3>@model.value.specimen.name</h3><p>@model.value.specimen.nameLatin.getOrElse("")</p></td>
         </tr>
-        <tr>
-          <td class="caption">Хим. формула</td><td class="value">@formula(model.value.specimen.formula.getOrElse("-"))</td>
-        </tr>
+        @if(model.value.specimen.formula.getOrElse("").trim.length > 0) {
+          <tr>
+            <td class="caption">Хим. формула</td><td class="value">@formula(model.value.specimen.formula.getOrElse("-"))</td>
+          </tr>
+        }
+        @if(model.value.specimen.age.getOrElse("").trim.length > 0) {
+          <tr>
+            <td class="caption">Геологический возраст</td><td class="value">@model.value.specimen.age.getOrElse("-")</td>
+          </tr>
+        }
         <tr>
           <td class="caption">Размер (см)</td><td class="value">@model.value.specimen.size.getOrElse("-")</td>
         </tr>
