@@ -1,7 +1,25 @@
-@()
+@(filterForm: Form[CollectionFilters], availableSets: CollectionFilterAvailableSets)
 
 @import views.html.layout._
 
-@main("Коллекция") {
-  // todo
+@displayLevel(level: List[Hierarchy[Loaded[Category]]], levelNo: Int) = {
+    <ul class="hierarchy-links">
+    @for(e <- level) {
+      <li class="level-@levelNo"><a href="@routes.CollectionController.query?category=@e.node.id">@e.node.value.title</a></li>
+      @if(e.children.nonEmpty) {
+        @displayLevel(e.children, levelNo + 1)
+      }
+    }
+    </ul>
+}
+
+@main("Коллекция музея камея в Севастополе") {
+  @filter_form(filterForm, availableSets)
+  <h1>Коллекция музея камея в Севастополе</h1>
+  
+  @collection_article()
+  
+  @if(availableSets.categories.nonEmpty) {
+    @displayLevel(availableSets.categories, 1)
+  }
 }

@@ -33,23 +33,27 @@ trait CollectionController extends Controller { this: ModelServicesComponent =>
     filterForm.bindFromRequest.fold(
       formWithErrors => BadRequest,
       filters => {
-        val categories = filters.categoryId.flatMap(Services.CategoryService.findSubtree(_))
-        val depositsPlace = filters.depositsPlaceId.flatMap(Services.DepositsPlaceService.findById(_))
-        val expos = filters.expositionId.flatMap(Services.ExpositionService.findSubtree(_))
+          val available = CollectionFilterAvailableSets(Services.CategoryService.loadAllTrees,
+            Services.DepositsPlaceService.loadAll,
+            Services.ExpositionService.loadAllTrees)
 
-        val title = List(
-          categories.map(_.node.value.title),
-          depositsPlace.map(_.value.title),
-          expos.map(_.node.value.title),
-          filters.keyword.map(q => s"Результаты поиска для $q")).flatten.headOption.getOrElse("Коллекция")
+        if (List(filters.keyword, filters.categoryId, filters.depositsPlaceId, filters.expositionId).flatten.isEmpty) {
+          Ok(views.html.collection.collection(filterForm, available))
+        } else {
+          val categories = filters.categoryId.flatMap(Services.CategoryService.findSubtree(_))
+          val depositsPlace = filters.depositsPlaceId.flatMap(Services.DepositsPlaceService.findById(_))
+          val expos = filters.expositionId.flatMap(Services.ExpositionService.findSubtree(_))
 
-        val results = Services.SpecimenService.search(filters.keyword, categories, depositsPlace, expos)
+          val title = List(
+            categories.map(_.node.value.title),
+            depositsPlace.map(_.value.title),
+            expos.map(_.node.value.title),
+            filters.keyword.map(q => s"Результаты поиска для $q")).flatten.headOption.getOrElse("Коллекция")
 
-        val available = CollectionFilterAvailableSets(Services.CategoryService.loadAllTrees,
-          Services.DepositsPlaceService.loadAll,
-          Services.ExpositionService.loadAllTrees)
+          val results = Services.SpecimenService.search(filters.keyword, categories, depositsPlace, expos)
 
-        Ok(views.html.collection.results(results, title, filterForm.bindFromRequest(), available))
+          Ok(views.html.collection.results(results, title, filterForm.bindFromRequest(), available))
+        }
       })
   }
 }

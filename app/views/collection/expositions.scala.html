@@ -3,7 +3,7 @@
 @import views.html.layout._
 
 @displayLevel(level: List[Hierarchy[Loaded[Exposition]]], levelNo: Int) = {
-    <ul>
+    <ul class="hierarchy-links">
     @for(e <- level) {
       <li class="level-@levelNo"><a href="@routes.CollectionController.query?exposition=@e.node.id">@e.node.value.title</a></li>
       @if(e.children.nonEmpty) {

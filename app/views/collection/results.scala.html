@@ -3,36 +3,7 @@
 @import views.html.layout._
 
 @main(title) {
-  @helper.form(routes.CollectionController.query(), 'class -> "specimen-filters") {
-    <div class="long-field">
-      @helper.select(filterForm("category"),
-        options = helper.options(("" -> "Все экспонаты коллекции") :: availableSets.categories.flatMap(_.toListWithDepth(0)).map {
-          case (l, depth) => l.id.toString -> (("\u00a0" * 2 * depth) + l.value.title)
-          }: _*
-        ),
-         '_label -> "Классификация минералов:", '_showConstraints -> false, 'class -> "submit-on-change chosen-select")
-    </div> 
-    
-    <div class="short-field">
-      @helper.select(filterForm("depositsPlace"),
-        options = helper.options(("" -> "Все месторождения") :: availableSets.depositsPlaces.map(l => l.id.toString -> l.value.title): _*),
-        '_label -> "Месторождение:", '_showConstraints -> false, 'class -> "submit-on-change chosen-select")
-    </div> 
-    
-    <div class="short-field">
-      @helper.select(filterForm("exposition"),
-        options = helper.options(("" -> "Все экспозиции") :: availableSets.expositions.flatMap(_.toListWithDepth(0)).map {
-          case (l, depth) => l.id.toString -> (("\u00a0" * 2 * depth) + l.value.title)
-          }: _*
-        ),
-         '_label -> "Экспозиция:", '_showConstraints -> false, 'class -> "submit-on-change chosen-select")
-    </div> 
-       
-    <div class="short-field last">
-      @helper.inputText(filterForm("keyword"), '_label -> "Точный поиск (введите слово):", 'class -> "submit-on-enter", 'autofocus -> None)
-      <input type="submit" value="Найти" class="submit">
-    </div> 
-  }
+  @filter_form(filterForm, availableSets)
   <h1>@title</h1>
   @if(specimens.isEmpty) {
     <p>Не найдено ни одного подходящего образца.</p>

@@ -325,19 +325,9 @@ td.caption {
   }
 }
 
-#page-testimonials {
-    .author {
-      font-weight: bold;
-      font-style: italic;
-      color: #666;
-    }
-}
+ul.hierarchy-links {
+  margin: 0;
 
-#page-expositions {
-  ul {
-    margin: 0;
-  }
-  
   li {
     @include no-bullets;
     
@@ -347,4 +337,12 @@ td.caption {
       margin-top: 16px;
     }
   }
+}
+
+#page-testimonials {
+    .author {
+      font-weight: bold;
+      font-style: italic;
+      color: #666;
+    }
 }
