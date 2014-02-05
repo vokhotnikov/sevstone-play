@@ -10,7 +10,7 @@
       val imgRegex = "(?i)<img(\\s+[^>]*)?>".r
       val styleAttrRegex = "(?i)\\s*style=\"[^\"]+\"\\s*".r
       val srcAttrRegex = "(?i)\\s*src=\"([^\"]+)\"\\s*".r
-      
+
       val html = imgRegex.replaceAllIn(article.value.text, m => {
         val attrs = m.group(1).trim()
         val (linkAttrs, imgAttrs) = styleAttrRegex.findFirstMatchIn(attrs) match {
@@ -24,4 +24,5 @@
       Html(html)
     }
   </div>
+  <a class="button" href="@routes.ArticlesController.list()">Другие статьи</a>
 }
