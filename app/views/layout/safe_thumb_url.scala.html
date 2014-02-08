@@ -1,0 +1,12 @@
+@* helper to get URL of image thumb or placehilder *@
+@(imageUID: Option[String], width: Int)
+
+@import se.digiplant._
+
+@{
+  imageUID.map { uid =>
+    scalr.routes.ScalrResAssets.at(uid, width, 0) 
+  }.getOrElse {
+    routes.Assets.at("img/no_image.jpg")
+  }
+}

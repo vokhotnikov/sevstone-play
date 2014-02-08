@@ -1,0 +1,12 @@
+@* helper to get image URL or default placeholder *@
+@(imageUID: Option[String])
+
+@import se.digiplant._
+
+@{
+  imageUID.map { uid => 
+    res.routes.ResAssets.at(uid)
+  }.getOrElse {
+    routes.Assets.at("img/no_image.jpg")
+  }
+}

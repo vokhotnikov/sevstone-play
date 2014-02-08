@@ -5,8 +5,8 @@
 
 @main(model.value.specimen.name, Some("page-specimen")) {
   <div class="content">
-    <a href="/@model.value.mainImage.get.url" title="@model.value.specimen.name" data-lightbox="main-photo">
-      <img class="photo" src="/@model.value.mainImage.get.url" alt="@model.value.specimen.name">
+    <a href="@safe_image_url(model.value.mainImage.flatMap(_.fileUID))" title="@model.value.specimen.name" data-lightbox="main-photo">
+      <img class="photo" src="@safe_thumb_url(model.value.mainImage.flatMap(_.fileUID), 232)" alt="@model.value.specimen.name">
     </a>
 
     <div class="properties">

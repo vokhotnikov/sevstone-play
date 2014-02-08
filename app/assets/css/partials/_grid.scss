@@ -54,14 +54,14 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
       
       .photo {
         @include column(2);
-        height: span(2) - 2px;
-        width: span(2) - 2px;
+        height: floor(span(2)) - 2px;
+        width: floor(span(2)) - 2px;
         overflow: hidden;
         @include border-radius(50%);
         border: 1px solid #ccc;
         
         img {
-          width: span(2);
+          width: floor(span(2));
           height: auto;
           border: 0;
         }
@@ -120,6 +120,21 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
 }
 
 #page-specimen {
+  .content {
+    @include column($blueprint-grid-columns - 4);
+    @include prepend(2);
+    
+    img.photo {
+      @include column(6);
+      height: auto;
+    }
+    
+    .properties {
+      @include column($blueprint-grid-columns - 11);
+      @include push(1);
+    }
+  }
+
   .top-articles {
     @include column($blueprint-grid-columns - 4);
     @include push(2);
@@ -137,7 +152,7 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
     }
   }
 }
-
+  
 #page-contacts {
   .contacts {
     @include column($col-two-thirds - 1);
@@ -203,22 +218,5 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
     @include photo-frame;
     width: floor(span(6));
     height: auto;
-  }
-}
-  
-#page-specimen {
-  .content {
-    @include column($blueprint-grid-columns - 4);
-    @include prepend(2);
-    
-    img.photo {
-      @include column(6);
-      height: auto;
-    }
-    
-    .properties {
-      @include column($blueprint-grid-columns - 11);
-      @include push(1);
-    }
   }
 }

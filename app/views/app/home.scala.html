@@ -16,7 +16,7 @@
             }
           </div>
         </div>
-        <img src="@stone.value.mainImage.get.url">
+        <img src="@safe_thumb_url(stone.value.mainImage.flatMap(_.fileUID), 232)">
       </a>
     }
   }
