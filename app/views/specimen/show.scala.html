@@ -28,10 +28,10 @@
           <td class="caption">Размер (см)</td><td class="value">@model.value.specimen.size.getOrElse("-")</td>
         </tr>
         <tr>
-          <td class="caption">Месторождение</td><td class="value"><a href="@routes.ApplicationController.todo">@model.value.specimen.depositsPlace.value.title</a></td>
+          <td class="caption">Месторождение</td><td class="value"><a href="@routes.CollectionController.query?depositsPlace=@extract_id(model.value.specimen.depositsPlace)">@model.value.specimen.depositsPlace.value.title</a></td>
         </tr>
         <tr>
-          <td class="caption">Экспозиция</td><td class="value"><a href="@routes.ApplicationController.todo">@model.value.specimen.exposition.value.title<a></a></td>
+          <td class="caption">Экспозиция</td><td class="value"><a href="@routes.CollectionController.query?exposition=@extract_id(model.value.specimen.exposition)">@model.value.specimen.exposition.value.title<a></a></td>
         </tr>
         <tr>
           <td class="caption">Описание</td><td class="value">@Html(model.value.specimen.shortDescription)</td>
