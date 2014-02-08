@@ -6,6 +6,8 @@ version := "1.0-SNAPSHOT"
 
 scalacOptions += "-feature"
 
+resolvers += "OSS Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+
 libraryDependencies ++= Seq(
   jdbc,
   cache,
@@ -15,6 +17,8 @@ libraryDependencies ++= Seq(
   "com.netflix.rxjava" % "rxjava-scala" % "0.15.1",
   "com.typesafe.play" %% "play-slick" % "0.5.0.8",
   "postgresql" % "postgresql" % "9.1-901.jdbc4",
+  "se.digiplant" %% "play-res" % "1.0",
+  "se.digiplant" %% "play-scalr" % "1.0.1",
   "org.mockito" % "mockito-core" % "1.9.5" % "test"
 )
 

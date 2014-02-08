@@ -1,6 +1,3 @@
-# --- Created by Slick DDL
-# To stop Slick DDL generation, remove this comment and start using Evolutions
-
 # --- !Ups
 
 create table "articles" ("title" VARCHAR(254) NOT NULL,"summary" text NOT NULL,"text" text NOT NULL,"image_id" BIGINT NOT NULL,"added_at" TIMESTAMP NOT NULL,"id" SERIAL NOT NULL PRIMARY KEY);

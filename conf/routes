@@ -19,7 +19,13 @@ GET     /specimen/:specimenId       controllers.SpecimenController.show(specimen
 
 GET     /todo                       controllers.ApplicationController.todo
 
+GET     /exportFiles                controllers.UserFilesController.exportAll
+GET     /exportArticleImages        controllers.UserFilesController.exportArticleImages
 GET     /userfiles/*path            controllers.UserFilesController.file(path)
+
+GET     /file/:file                 se.digiplant.res.ResAssets.at(file)
+GET     /res/:width/:height/:file      se.digiplant.scalr.ScalrResAssets.at(file, width: Int, height: Int, mode = "fit_to_width")
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

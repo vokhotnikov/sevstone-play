@@ -180,7 +180,7 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
       @include column(6);
       
       img {
-        width: span(6);
+        width: floor(span(6));
         height: auto;
         @include photo-frame;
       }
@@ -201,7 +201,7 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
   
   img {
     @include photo-frame;
-    width: span(6);
+    width: floor(span(6));
     height: auto;
   }
 }

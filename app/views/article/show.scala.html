@@ -1,7 +1,6 @@
 @(article: MaybeLoaded[Article])
 
 @import views.html.layout._
-@import helpers._
 
 @main(article.value.title, Some("page-article")) {
   <div class="body">
@@ -10,6 +9,7 @@
       val imgRegex = "(?i)<img(\\s+[^>]*)?>".r
       val styleAttrRegex = "(?i)\\s*style=\"[^\"]+\"\\s*".r
       val srcAttrRegex = "(?i)\\s*src=\"([^\"]+)\"\\s*".r
+      var thumbnailRegex = "(?i)/file/(.+)".r
 
       val html = imgRegex.replaceAllIn(article.value.text, m => {
         val attrs = m.group(1).trim()
@@ -18,8 +18,10 @@
           case None => ("", attrs)
         }
         val src = srcAttrRegex.findFirstMatchIn(attrs).map(_.group(1)).getOrElse("#")
-        val lightboxAttr = s"data-lightbox='photo@{rnd.nextLong}'"
-        s"<a class='link-container' href='$src' $lightboxAttr $linkAttrs><img $imgAttrs></a>" 
+        val thumbSrc = thumbnailRegex.replaceAllIn(src, m => s"/res/232/0/${m.group(1)}")
+        val thumbImgAttrs = srcAttrRegex.replaceFirstIn(imgAttrs, s" src='$thumbSrc'")
+        val lightboxAttr = s"data-lightbox='photo${rnd.nextLong}'"
+        s"<a class='link-container' href='$src' $lightboxAttr $linkAttrs><img $thumbImgAttrs></a>" 
       })
       Html(html)
     }

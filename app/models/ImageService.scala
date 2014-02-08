@@ -3,7 +3,7 @@ package models
 import org.joda.time.DateTime
 import models.dao.ImageRecord
 
-case class Image(url: String, addedAt: DateTime)
+case class Image(url: String, addedAt: DateTime, fileUID: Option[String])
 
 trait ImagesComponent {
   val ImageService: ImageService
@@ -12,8 +12,8 @@ trait ImagesComponent {
     object daoMapping {
       import scala.language.implicitConversions
 
-      implicit def mapToLoaded(v: ImageRecord) = Loaded(v.id.get, Image(v.url, v.addedAt))
-      implicit def mapToRecord(a: Image) = ImageRecord(None, a.url, a.addedAt)
+      implicit def mapToLoaded(v: ImageRecord) = Loaded(v.id.get, Image(v.url, v.addedAt, v.fileUID))
+      implicit def mapToRecord(a: Image) = ImageRecord(None, a.url, a.addedAt, a.fileUID)
     }
 
     import daoMapping._
@@ -25,6 +25,6 @@ trait ImagesComponent {
     
     def findById(id: Long)(implicit session: Session) = byId(id).firstOption.map(mapToLoaded)
 
-    def add(image: Image)(implicit session: Session) = daoService.Images.autoInc insert image
+    def add(image: Image)(implicit session: Session) = daoService.Images.autoInc insert (image.url, image.addedAt, image.fileUID)
   }
 }

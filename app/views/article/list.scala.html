@@ -1,6 +1,7 @@
 @(articles: List[Loaded[Article]])
 
 @import views.html.layout._
+@import se.digiplant._
 
 @main("Статьи", Some("page-articles")) {
   <h1>Статьи</h1>
@@ -11,7 +12,7 @@
       @for(la <- articles) {
         <li>
           <a href="@routes.ArticlesController.show(la.id)" title="@la.value.title" class="photo">
-            <img src="@la.value.image.value.url">
+            <img src="@scalr.routes.ScalrResAssets.at(la.value.image.value.fileUID.get, 232, 0)">
           </a>
           <div class="text">
             <h3><a href="@routes.ArticlesController.show(la.id)">@la.value.title</a></h3>
