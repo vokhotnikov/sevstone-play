@@ -6,7 +6,7 @@
   @filter_form(filterForm, availableSets)
   <h1>@title</h1>
   @if(specimens.isEmpty) {
-    <p>Не найдено ни одного подходящего образца.</p>
+    <p>В нашем музее нет экспонатов для данных критериев поиска. Попробуйте упростить поиск или выбрать другую классификацию.</p>
   } else {
     <div class="specimen-groups">
       @views.html.search.helpers.specimen_results(specimens)
