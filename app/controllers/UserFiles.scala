@@ -30,13 +30,13 @@ trait UserFilesController extends Controller { this: ModelServicesComponent =>
       val these = dir.listFiles
       these ++ these.filter(_.isDirectory).flatMap(getRecursiveListOfFiles)
     }
-    
+
     val files = getRecursiveListOfFiles(filesRoot).filter(f => f.isFile() && f.canRead())
     val result = files.map(f => f.getAbsolutePath().toLowerCase() -> f).toMap
-    
+
     println(s"Indexed ${result.size} files under ${filesRoot.getAbsolutePath()}")
     result.take(10).map(_._1).foreach(println(_))
-    
+
     result
   }
 
@@ -63,59 +63,87 @@ trait UserFilesController extends Controller { this: ModelServicesComponent =>
 
     val processed = toImport.flatMap { img =>
       val path = if (img.url.startsWith("userfiles/")) img.url.substring("userfiles/".length) else img.url
-      val filePath = new java.io.File(filesRoot, path).getAbsolutePath()
-      
-      userfilesNormalizedMap.get(filePath.toLowerCase()).map { file => 
+      val file = new java.io.File(filesRoot, path)
+
+      if (file.isFile() && file.canRead()) {
         val uid = se.digiplant.res.Res.put(file)
         val up = for {
           i <- daoService.Images if i.id === img.id
         } yield i.fileUID
 
         up.update(Some(uid))
-        
-        play.api.libs.Files.copyFile(se.digiplant.res.Res.get(uid), new File(filePath), true, true)
-      }
+        Some(uid)
+
+        //play.api.libs.Files.copyFile(se.digiplant.res.Res.get(uid), new File(filePath), true, true)
+      } else None
     }
 
     Ok(s"All done, ${processed.size} new files imported")
   }
-  
+
   def exportArticleImages = DBAction { implicit r =>
     import models.dao.current.daoService
     import models.dao.current.daoService.profile.simple._
 
-    
     val processed = Services.ArticleService.allArticles.flatMap { la =>
       val text = la.value.text;
       val toSubstitute = """(?i)<img[^>]*? src="([^"]+?)"[^>]*>""".r.findAllIn(text).matchData.map { m =>
         (la, m.group(1).trim)
-      }.flatMap { case (la, url) => 
-        if (url.startsWith("/userfiles/")) Some((la, url.substring("/userfiles/".length), url)) else None
-      }.flatMap { case (la, url, originalUrl) =>
-        val filePath = new java.io.File(filesRoot, url).getAbsolutePath()
-        
-        userfilesNormalizedMap.get(filePath.toLowerCase()).map { file => 
-          val uid = se.digiplant.res.Res.put(file)
-          play.api.libs.Files.copyFile(se.digiplant.res.Res.get(uid), new File(filePath), true, true)
-          daoService.Images.autoInc.insert((url, la.value.addedAt, Some(uid)))
-          (originalUrl, uid)
-        }
+      }.flatMap {
+        case (la, url) =>
+          if (url.startsWith("/userfiles/")) Some((la, url.substring("/userfiles/".length), url)) else None
+      }.flatMap {
+        case (la, url, originalUrl) =>
+          val file = new java.io.File(filesRoot, url)
+
+          if (file.isFile() && file.canRead()) {
+            val uid = se.digiplant.res.Res.put(file)
+            //play.api.libs.Files.copyFile(se.digiplant.res.Res.get(uid), new File(filePath), true, true)
+            daoService.Images.autoInc.insert((url, la.value.addedAt, Some(uid)))
+            Some(originalUrl, uid)
+          } else None
       }.toMap
-      
+
       val newText = """(?i) src="([^"]+?)"""".r.replaceAllIn(la.value.text, m => {
         toSubstitute.get(m.group(1)).map(r => " src=\"/file/" + r + "\"").getOrElse(m.matched)
       })
-      
+
       val up = for {
         a <- daoService.Articles if a.id === la.id
       } yield a.text
-     
+
       up.update(newText)
-      
+
       toSubstitute
     }
-    
+
     Ok(s"All done, ${processed.size} images imported")
+  }
+
+  def pregenerateThumbnails = DBAction { implicit r =>
+    import models.dao.current.daoService
+    import models.dao.current.daoService.profile.simple._
+
+    val toGenerate = for {
+      img <- daoService.Images
+
+    } yield img.fileUID
+
+    val widths = List(111, 232)
+
+    val pairs = for {
+      uid <- toGenerate.list.flatten
+      w <- widths
+    } yield (uid, w)
+
+    pairs.foreach {
+      case (uid, width) => {
+        se.digiplant.scalr.Scalr.getRes(uid, "default", width, 0, se.digiplant.scalr.api.Resizer.Mode.FIT_TO_WIDTH)
+        println(s"Generate $width for $uid")
+      }
+    }
+
+    Ok(s"All done, processed ${pairs.size} thumbnails")
   }
 }
 
