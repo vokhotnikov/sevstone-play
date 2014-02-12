@@ -126,21 +126,12 @@ td.caption {
 
 .top-articles {
   h2 {
-    color: #3a3939;
+    color: $base-color;
     font-size: 30px;
     line-height: 32px;
     padding: 0;
     margin: 0 0 1em 0;
     text-transform: uppercase;
-
-   .header-word-1 {
-      display: block;
-      color: $base-color;
-      font-size: 16px;
-      line-height: 18px;
-      padding: 0;
-      margin: 0;
-    }
   }
   
   h3 {
