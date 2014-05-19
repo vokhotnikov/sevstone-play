@@ -38,6 +38,19 @@ a.summary {
   color: $text-color;
 }
 
+a.button {
+  @include inline-block;
+  font-size: 12px;
+  height: image-height("more.gif");
+  line-height: image-height("more.gif");
+  padding: 0 20px 0 20px;
+  color: #000;
+  text-decoration: none;
+  background: #ffc61e image-url("more.gif") repeat-x;
+  border: 1px solid #f4d699;
+  @include border-radius;
+}
+
 img.photo, .photo img {
   @include photo-frame;
 }

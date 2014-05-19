@@ -13,7 +13,7 @@
   </tr>
   @for(s <- specimens) {
     <tr class="divlink" data-href="@routes.SpecimenController.show(s.id)">
-      <td class="photo"><img src="@safe_thumb_url(s.value.mainImage.flatMap(_.fileUID), 111)"><p>@{s.value.mainImage.size + s.value.additionaryImages.size} фото</p></td>
+      <td class="photo"><img src="@safe_thumb_url(s.value.mainImage.flatMap(_.fileUID), 111)"><p>@{s.value.mainImage.size + s.value.additionalImages.size} фото</p></td>
       <td class="cell-name">
         <p class="name">@s.value.specimen.name</p>
         <p>@s.value.specimen.nameLatin.getOrElse("-")</p>

@@ -124,15 +124,37 @@ $col-two-thirds: ceil(2 * $blueprint-grid-columns / 3);
     @include column($blueprint-grid-columns - 4);
     @include prepend(2);
     
-    img.photo {
-      @include column(6);
-      height: auto;
+    .photos {
+      @include column(7);
+
+      .specimen-photo {
+        @include column(3);
+        display: block;
+
+        img {
+          width: floor(span(3));
+          height: auto;
+          @include prepend-top(4px);
+        }
+      }
+      
+      .specimen-photo.main {
+        @include column(6);
+        
+        img {
+          width: floor(span(6));
+        }
+      }
     }
     
     .properties {
       @include column($blueprint-grid-columns - 11);
       @include push(1);
     }
+  }
+
+  .description {
+    margin-top: 16px;
   }
 
   .top-articles {

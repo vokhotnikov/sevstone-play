@@ -36,16 +36,3 @@ $base-color-border: lighten(desaturate($base-color, 30%), 50%);
 .container {
   //@include showgrid;
 }
- 
-a.button {
-  @include inline-block;
-  font-size: 12px;
-  height: image-height("more.gif");
-  line-height: image-height("more.gif");
-  padding: 0 20px 0 20px;
-  color: #000;
-  text-decoration: none;
-  background: #ffc61e image-url("more.gif") repeat-x;
-  border: 1px solid #f4d699;
-  @include border-radius;
-}

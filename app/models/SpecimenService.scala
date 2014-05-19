@@ -7,7 +7,7 @@ case class Specimen(name: String, nameLatin: Option[String], size: Option[String
   label: String, shortDescription: String, description: String, showOnSite: Boolean, priority: Int,
   category: MaybeLoaded[Category], exposition: MaybeLoaded[Exposition], depositsPlace: MaybeLoaded[DepositsPlace])
 
-case class SpecimenWithImages(specimen: Specimen, mainImage: Option[Image], additionaryImages: List[Image])
+case class SpecimenWithImages(specimen: Specimen, mainImage: Option[Image], additionalImages: List[Image])
 
 trait SpecimensComponent { this: CategoriesComponent with ExpositionsComponent with DepositsPlacesComponent with ImagesComponent =>
   val SpecimenService: SpecimenService
