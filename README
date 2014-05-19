@@ -1,4 +1,7 @@
-This is your new Play application
-=====================================
+# Sevstone-play
 
-This file will be packaged with your application, when using `play dist`.
+The pupropse of the project is to rewrite exisiting version of Sevastopol
+Museum of Minerals website to address severe maintainability, performance and
+security concerns.
+
+The new version uses PostgreSQL, Play Framework 2 (Scala) and Slick.
